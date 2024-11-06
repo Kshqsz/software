@@ -1,0 +1,77 @@
+<template>  
+  <div class="home-container">  
+    <el-row class="row">  
+      <el-col :span="5" class="menu-column">  
+        <el-menu  
+          default-active="audit"  
+          class="side-menu"  
+          @select="handleSelect"  
+          background-color="#f9f9f9"  
+          text-color="#545c64"  
+          active-text-color="#409EFF"  
+        >  
+          <el-menu-item index="audit" @click="navigateTo('/home/audit')">审核</el-menu-item>  
+          <el-menu-item index="product" @click="navigateTo('/home/product')">产品</el-menu-item>  
+          <el-menu-item index="merchant" @click="navigateTo('/home/merchant')">商家</el-menu-item>  
+          <el-menu-item index="user" @click="navigateTo('/home/user')">用户</el-menu-item>  
+          <el-menu-item index="order" @click="navigateTo('/home/order')">订单</el-menu-item>  
+        </el-menu>  
+      </el-col>  
+      <el-col :span="19" class="content-column">  
+        <div class="content">  
+          <router-view></router-view>  
+        </div>  
+      </el-col>  
+    </el-row>  
+  </div>  
+</template>  
+
+<script>  
+export default {  
+  methods: {  
+    navigateTo(path) {  
+      this.$router.push(path);  
+    },  
+    handleSelect(index) {  
+      const routes = {  
+        audit: '/home/audit',  
+        product: '/home/product',  
+        merchant: '/home/merchant',  
+        user: '/home/user',  
+        order: '/home/order',  
+      };  
+      this.$router.push(routes[index]);  
+    },  
+  },  
+};  
+</script>  
+
+<style scoped>  
+.home-container {  
+  height: 100vh;  
+}  
+
+.row {  
+  height: 100%;  
+}  
+
+.menu-column {  
+  border-right: 1px solid #eaeaea; /* 样式分隔线 */  
+  height: 100%;  
+}  
+
+.side-menu {  
+  height: 100%;  
+}  
+
+.content-column {  
+  padding: 20px; /* 内边距设置 */  
+  height: 100%;  
+  overflow-y: auto; /* 使内容区域可以滚动 */  
+  background-color: #ffffff; /* 主内容区域背景色 */  
+}  
+
+.content {  
+  min-height: 100%; /* 使内容区至少占满整个高度 */  
+}  
+</style>
