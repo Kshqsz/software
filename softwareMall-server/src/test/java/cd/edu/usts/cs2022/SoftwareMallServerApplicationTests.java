@@ -1,4 +1,4 @@
-package cd.edu.usts.cs2022.softwaremallserver;
+package cd.edu.usts.cs2022;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

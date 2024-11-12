@@ -109,7 +109,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>cd.edu.usts.cs2022.softwaremallserver.SoftwareMallServerApplication</mainClass>
+                    <mainClass>cd.edu.usts.cs2022.SoftwareMallServerApplication</mainClass>
                     <skip>true</skip>
                 </configuration>
                 <executions>

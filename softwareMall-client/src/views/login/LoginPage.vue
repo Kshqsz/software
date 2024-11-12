@@ -1,5 +1,5 @@
 <script setup>
-//import { userRegisterService, userLoginService } from '@/api/user'
+import { userLoginService } from '@/api/user'
 import { ref, watch } from 'vue'
 import { User, Lock } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores';
@@ -19,11 +19,11 @@ const userStore = useUserStore()
 const router = useRouter()
 
 const login = async () => {
-  //await form.value.validate()
-  // const res = await userLoginService(formModel.value)
-  // userStore.setToken(res.data.token)
+  await form.value.validate()
+  const res = await userLoginService(formModel.value)
+  userStore.setToken(res.data.token)
   ElMessage.success("登录成功~")
-  router.push('/')
+  router.push('/home')
 }
 // register
 const formModel = ref({
@@ -44,15 +44,15 @@ watch(isRegister, () => {
 const rules = {
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' }, // check when lost focus
-    { min: 5, max: 10, message: '用户名必须为5~10位', trigger: 'blur' }
+    { min: 3, max: 10, message: '用户名必须为3~10位', trigger: 'blur' }
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
-    { pattern: /^\S{6,15}$/, message: '密码必须为6-15位非空字符', trigger: 'blur' }
+    { pattern: /^\S{3,15}$/, message: '密码必须为3-15位非空字符', trigger: 'blur' }
   ],
   repassword: [
     { required: true, message: '请输入密码', trigger: 'blur' },
-    { pattern: /^\S{6,15}$/, message: '密码必须为6-15位非空字符', trigger: 'blur' },
+    { pattern: /^\S{3,15}$/, message: '密码必须为3-15位非空字符', trigger: 'blur' },
     {
       validator: (rule, value, callback) => {
         if (value !== formModel.value.password) {

@@ -1,4 +1,4 @@
-package cd.edu.usts.cs2022.softwaremallserver.pojo.dto;
+package cd.edu.usts.cs2022.pojo.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

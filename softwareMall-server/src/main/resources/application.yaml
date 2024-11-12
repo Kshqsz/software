@@ -14,10 +14,10 @@ spring:
       max-file-size: 50MB
       max-request-size: 100MB
   application:
-    name: music-server
+    name: softwareMall-server
 mybatis:
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
 
 #spring事务管理日志

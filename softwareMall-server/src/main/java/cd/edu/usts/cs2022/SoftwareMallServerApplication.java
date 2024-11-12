@@ -1,4 +1,4 @@
-package cd.edu.usts.cs2022.softwaremallserver;
+package cd.edu.usts.cs2022;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
