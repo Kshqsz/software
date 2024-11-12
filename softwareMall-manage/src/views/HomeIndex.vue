@@ -1,9 +1,34 @@
+<script setup>  
+import { ref } from 'vue';  
+import { useRouter } from 'vue-router';  
+
+const router = useRouter();  
+const activeIndex = ref('audit');  
+
+const navigateTo = (path) => {  
+  router.push(path);  
+};  
+
+const handleSelect = (index) => {  
+  activeIndex.value = index;  
+  const routes = {  
+    audit: '/home/audit',  
+    product: '/home/product',  
+    merchant: '/home/merchant',  
+    user: '/home/user',  
+    order: '/home/order',  
+  };  
+  router.push(routes[index]);  
+};  
+</script>  
+
+
 <template>  
   <div class="home-container">  
     <el-row class="row">  
       <el-col :span="5" class="menu-column">  
         <el-menu  
-          default-active="audit"  
+          :default-active="activeIndex"  
           class="side-menu"  
           @select="handleSelect"  
           background-color="#f9f9f9"  
@@ -26,25 +51,7 @@
   </div>  
 </template>  
 
-<script>  
-export default {  
-  methods: {  
-    navigateTo(path) {  
-      this.$router.push(path);  
-    },  
-    handleSelect(index) {  
-      const routes = {  
-        audit: '/home/audit',  
-        product: '/home/product',  
-        merchant: '/home/merchant',  
-        user: '/home/user',  
-        order: '/home/order',  
-      };  
-      this.$router.push(routes[index]);  
-    },  
-  },  
-};  
-</script>  
+
 
 <style scoped>  
 .home-container {  
@@ -56,7 +63,7 @@ export default {
 }  
 
 .menu-column {  
-  border-right: 1px solid #eaeaea; /* 样式分隔线 */  
+  border-right: 1px solid #eaeaea;  
   height: 100%;  
 }  
 
@@ -65,13 +72,13 @@ export default {
 }  
 
 .content-column {  
-  padding: 20px; /* 内边距设置 */  
+  padding: 20px;  
   height: 100%;  
-  overflow-y: auto; /* 使内容区域可以滚动 */  
-  background-color: #ffffff; /* 主内容区域背景色 */  
+  overflow-y: auto;  
+  background-color: #ffffff;  
 }  
 
 .content {  
-  min-height: 100%; /* 使内容区至少占满整个高度 */  
+  min-height: 100%;  
 }  
 </style>
