@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useUserStore } from '@/stores'
+import { useAdminStore } from '@/stores'
 import { ElMessage } from 'element-plus'
 import router from '@/router'
 const baseURL = '/api'
@@ -14,9 +14,9 @@ const instance = axios.create({
 instance.interceptors.request.use(
     (config) => {
         // TODO 2. 携带token
-        const userStore = useUserStore()
-        if (userStore.token) {
-            config.headers.Authorization = userStore.token
+        const adminStore = useAdminStore()
+        if (adminStore.token) {
+            config.headers.Authorization = adminStore.token
         }
         return config
     },

@@ -1,10 +1,9 @@
 <script setup>  
-import { reactive, ref } from 'vue';  
+import { ref } from 'vue';  
 import { useRouter } from 'vue-router';  
-/* import axios from 'axios';  
-import { ElMessage } from 'element-plus'; 
-import { UserStore } from '@/stores'; */
-const form = reactive({  
+import { adminLoginService } from '@/api/admin';
+import { useAdminStore} from '@/stores';
+const form = ref({  
   username: '',  
   password: '',  
 });  
@@ -17,9 +16,12 @@ const rules = {
 const formRef = ref(null);  
 const router = useRouter();  
 
+const adminStore = useAdminStore()
 
-
-const handleLogin = () => {  
+const handleLogin = async () => {  
+  const res = await adminLoginService(form.value)
+  adminStore.setToken(res.data.token)
+  ElMessage.success("登录成功");
   router.push('/home'); 
   // 验证数据是否合法
   /* formRef.value.validate(async (valid) => {  
