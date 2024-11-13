@@ -21,7 +21,7 @@ const adminStore = useAdminStore()
 const handleLogin = async () => {  
   const res = await adminLoginService(form.value)
   adminStore.setToken(res.data.token)
-  ElMessage.success("登录成功");
+ // ElMessage.success("登录成功");
   router.push('/home'); 
   // 验证数据是否合法
   /* formRef.value.validate(async (valid) => {  
