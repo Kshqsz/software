@@ -13,20 +13,12 @@
       <el-table-column prop="updatedAt" label="最后修改时间" />  
       <el-table-column prop="status" label="账号状态">  
         <template #default="scope">  
-          <div v-if="editingRowId === scope.row.id">  
-            <el-select v-model="scope.row.status">  
-              <el-option label="激活" value="active" />  
-              <el-option label="禁用" value="inactive" />  
-            </el-select>  
-          </div>  
-          <div v-else>  
-            <el-tag :type="scope.row.status === 'active' ? 'success' : 'danger'">  
-              {{ scope.row.status }}  
-            </el-tag>  
-            <el-button type="text" @click="editStatus(scope.row)">  
-              {{ scope.row.status === 'active' ? '禁用' : '激活' }}  
-            </el-button>  
-          </div>  
+          <el-button  
+            :type="scope.row.status === 'active' ? 'success' : 'danger'"  
+            @click="toggleStatus(scope.row)"  
+          >  
+            {{ scope.row.status === 'active' ? '正常' : '禁用' }}  
+          </el-button>  
         </template>  
       </el-table-column>  
     </el-table>  
@@ -34,7 +26,7 @@
 </template>  
 
 <script setup>  
-import { ref, reactive, onMounted } from 'vue';  
+import { reactive, onMounted } from 'vue';  
 
 const userList = reactive([  
   {  
@@ -69,10 +61,7 @@ const userList = reactive([
   },  
 ]);  
 
-const editingRowId = ref(null);  
-
-const editStatus = (row) => {  
-  editingRowId.value = row.id;  
+const toggleStatus = (row) => {  
   row.status = row.status === 'active' ? 'inactive' : 'active';  
 };  
 

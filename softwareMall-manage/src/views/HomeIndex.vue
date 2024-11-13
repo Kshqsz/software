@@ -16,7 +16,8 @@ const handleSelect = (index) => {
     product: '/home/product',  
     merchant: '/home/merchant',  
     user: '/home/user',  
-    order: '/home/order',  
+    order: '/home/order', 
+    category:'/home/category' 
   };  
   router.push(routes[index]);  
 };  
@@ -35,11 +36,13 @@ const handleSelect = (index) => {
           text-color="#545c64"  
           active-text-color="#409EFF"  
         >  
-          <el-menu-item index="audit" @click="navigateTo('/home/audit')">审核</el-menu-item>  
-          <el-menu-item index="product" @click="navigateTo('/home/product')">产品</el-menu-item>  
-          <el-menu-item index="merchant" @click="navigateTo('/home/merchant')">商家</el-menu-item>  
-          <el-menu-item index="user" @click="navigateTo('/home/user')">用户</el-menu-item>  
-          <el-menu-item index="order" @click="navigateTo('/home/order')">订单</el-menu-item>  
+          <el-menu-item index="audit" @click="navigateTo('/home/audit')">软件上架审核</el-menu-item>  
+          <el-menu-item index="product" @click="navigateTo('/home/product')">软件产品管理</el-menu-item>  
+          <el-menu-item index="category" @click="navigateTo('/home/category')">软件分类管理</el-menu-item>
+          <el-menu-item index="user" @click="navigateTo('/home/user')">用户管理</el-menu-item>
+          <el-menu-item index="merchant" @click="navigateTo('/home/merchant')">商家管理</el-menu-item>
+          <el-menu-item index="order" @click="navigateTo('/home/order')">查看订单</el-menu-item>  
+          
         </el-menu>  
       </el-col>  
       <el-col :span="19" class="content-column">  

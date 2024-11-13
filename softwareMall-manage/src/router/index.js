@@ -7,6 +7,7 @@ import Merchant from '../views/MerchantManger.vue'
 import User from '../views/UserManager.vue'
 import Home from '../views/HomeIndex.vue'
 import Order from '../views/OrderIndex.vue'
+import Category from '../views/CategoryIndex.vue'
 
 
 const routes = [
@@ -21,6 +22,7 @@ const routes = [
       { path: 'merchant', component: Merchant },  
       { path: 'user', component: User },
       { path: 'order',component: Order },
+      {path:'category',component:Category},
     ],  
   },  
 

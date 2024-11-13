@@ -1,22 +1,23 @@
 <template>  
   <div>  
-    <h1>商品上架审核</h1>  
+    <h1>软件上架审核</h1>  
     <el-table :data="pendingProducts" style="width: 100%">  
-      <el-table-column prop="image" label="商品图片" width="100">  
+      <el-table-column prop="image" label="软件图片" width="100">  
         <template #default="scope">  
-          <img :src="scope.row.image" alt="商品图片" class="product-image" />  
+          <img :src="scope.row.image" alt="软件图片" class="product-image" />  
         </template>  
       </el-table-column>  
-      <el-table-column prop="name" label="商品名称" />  
-      <el-table-column prop="description" label="商品描述" />  
-      <el-table-column prop="price" label="商品价格" />  
-      <el-table-column prop="link" label="商品链接" />  
-      <el-table-column prop="category" label="商品分类" />  
+      <el-table-column prop="name" label="软件名称" />  
+      <el-table-column prop="description" label="软件描述" />  
+      <el-table-column prop="price" label="软件价格" />  
+      <el-table-column prop="link" label="软件链接" />  
+      <el-table-column prop="category" label="软件分类" />  
+      <el-table-column prop="seller" label="商家" />  
       <el-table-column label="操作">  
         <template #default="scope">  
           <div style="display: flex; justify-content: center;">  
-            <el-button type="success" @click="approveProduct(scope.row)">审核通过</el-button>  
-            <el-button type="danger" @click="rejectProduct(scope.row)">审核失败</el-button>  
+            <el-button type="success" @click="approveProduct(scope.row)">同意</el-button>  
+            <el-button type="danger" @click="rejectProduct(scope.row)">拒绝</el-button>  
           </div>  
         </template>  
       </el-table-column>  
@@ -36,6 +37,7 @@ const pendingProducts = reactive([
     link: 'https://example.com/product-a',  
     image: 'https://via.placeholder.com/150',  
     category: '分类 A',  
+    seller: '商家 A',  
     status: 'pending',  
   },  
   {  
@@ -46,6 +48,7 @@ const pendingProducts = reactive([
     link: 'https://example.com/product-b',  
     image: 'https://via.placeholder.com/150',  
     category: '分类 B',  
+    seller: '商家 B',  
     status: 'pending',  
   },  
   {  
@@ -56,6 +59,7 @@ const pendingProducts = reactive([
     link: 'https://example.com/product-c',  
     image: 'https://via.placeholder.com/150',  
     category: '分类 C',  
+    seller: '商家 C',  
     status: 'pending',  
   },  
 ]);  
