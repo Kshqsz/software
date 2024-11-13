@@ -1,5 +1,5 @@
 <script setup>
-import { userLoginService } from '@/api/user'
+import { userLoginService, userRegisterService } from '@/api/user'
 import { ref, watch } from 'vue'
 import { User, Lock } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores';
@@ -8,12 +8,12 @@ import { useRouter } from 'vue-router';
 const isRegister = ref(false)
 const form = ref()
 
-// const register = async () => {
-//   await form.value.validate()
-//   await userRegisterService(formModel.value)
-//   ElMessage.success("注册成功~")
-//   isRegister.value = false
-// }
+const register = async () => {
+  await form.value.validate()
+  await userRegisterService(formModel.value)
+  ElMessage.success("注册成功~")
+  isRegister.value = false
+}
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -29,15 +29,20 @@ const login = async () => {
 const formModel = ref({
   username: '',
   password: '',
-  repassword: ''
+  rePassword: ''
 })
 
 
 watch(isRegister, () => {
-  formModel.value = {
+  if (!isRegister.value) {
+    formModel.value.username = formModel.value.username;
+    formModel.value.password = '';
+  } else {
+    formModel.value = {
     username: '',
     password: '',
-    repassword: ''
+    rePassword: ''
+  }
   }
 })
 
@@ -50,7 +55,7 @@ const rules = {
     { required: true, message: '请输入密码', trigger: 'blur' },
     { pattern: /^\S{3,15}$/, message: '密码必须为3-15位非空字符', trigger: 'blur' }
   ],
-  repassword: [
+  rePassword: [
     { required: true, message: '请输入密码', trigger: 'blur' },
     { pattern: /^\S{3,15}$/, message: '密码必须为3-15位非空字符', trigger: 'blur' },
     {
@@ -69,21 +74,21 @@ const rules = {
 
 <template>
   <el-row class="login-page">
-    <el-col :span="12" class="bg"></el-col>
+    <el-col :span= 12 class="bg"></el-col>
     <el-col :span="6" :offset="3" class="form">
       <el-card class="box-card">
         <el-form :model="formModel" :rules="rules" ref="form" size="large" autocomplete="off" v-if="isRegister">
-        <el-form-item>
-          <h1>软件商城注册</h1>
-        </el-form-item>
+          <el-form-item>
+            <h1>软件商城注册</h1>
+          </el-form-item>
           <el-form-item prop="username">
             <el-input v-model="formModel.username" :prefix-icon="User" placeholder="请输入用户名"></el-input>
           </el-form-item>
           <el-form-item prop="password">
             <el-input v-model="formModel.password" :prefix-icon="Lock" type="password" placeholder="请输入密码"></el-input>
           </el-form-item>
-          <el-form-item prop="repassword">
-            <el-input v-model="formModel.repassword" :prefix-icon="Lock" type="password" placeholder="请输入再次密码"></el-input>
+          <el-form-item prop="rePassword">
+            <el-input v-model="formModel.rePassword" :prefix-icon="Lock" type="password" placeholder="请输入再次密码" @keydown.enter="register"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button @click="register" class="button" type="primary" auto-insert-space> 注册 </el-button>
@@ -101,7 +106,8 @@ const rules = {
           </el-form-item>
           <el-form-item prop="password">
             <el-input v-model="formModel.password" name="password" :prefix-icon="Lock" type="password"
-              placeholder="请输入密码"></el-input>
+              placeholder="请输入密码" @keydown.enter="login">
+            </el-input>
           </el-form-item>
           <el-form-item class="flex">
           </el-form-item>
@@ -119,13 +125,13 @@ const rules = {
 
 <style lang="scss" scoped>
 .login-page {
-  height: 100vh;
+  height: 98vh;
   background-color: #fff;
 
   .bg {
     background:
       //url('@/assets/logo2.png') no-repeat 60% center / 240px auto,
-      url('@/assets/login_bg.jpg') no-repeat center / cover;
+      url('@/assets/bk.png') no-repeat center / cover;
     border-radius: 0 20px 20px 0;
   }
 

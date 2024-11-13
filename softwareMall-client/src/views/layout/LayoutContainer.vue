@@ -1,8 +1,6 @@
 <script setup>
 import { ref } from 'vue'
 import { Search } from '@element-plus/icons-vue'
-import logo1 from '@/assets/logo1.png'
-import logo3 from '@/assets/logo3.png'
 import car from '@/assets/xiaomi_car.jpg'
 import ultra from '@/assets/su7_ultra.jpg'
 
@@ -69,7 +67,7 @@ const menuItems = ref([
       <!-- 主内容区域 -->
       <el-main class="main-content">
         <!-- 图片轮播 -->
-        <el-carousel height="400px" indicator-position="outside">
+        <el-carousel height="510px" indicator-position="outside">
           <el-carousel-item v-for="item in imageList" :key="item.id">
             <div class="carousel-image-container">
               <img :src="item.url" alt="" class="carousel-image" />
@@ -111,6 +109,7 @@ const menuItems = ref([
   justify-content: space-between;
   padding: 0 20px;
   background-color: #ffffff;
+  margin-bottom: 10px;
 }
 
 .title {

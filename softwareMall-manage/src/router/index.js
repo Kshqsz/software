@@ -10,7 +10,7 @@ import Order from '../views/OrderIndex.vue'
 
 
 const routes = [
-  {path:'/',component:login},
+  { path:'/', component:login },
   {  
     path: '/home',   
     component: Home,  
