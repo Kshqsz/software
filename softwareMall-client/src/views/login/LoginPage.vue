@@ -21,7 +21,8 @@ const router = useRouter()
 const login = async () => {
   await form.value.validate()
   const res = await userLoginService(formModel.value)
-  userStore.setToken(res.data.token)
+  userStore.setToken(res.data.data.token)
+  userStore.setUsername(res.data.data.user.username)
   ElMessage.success("登录成功~")
   router.push('/home')
 }
