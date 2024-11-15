@@ -11,7 +11,7 @@ import Category from '../views/CategoryIndex.vue'
 
 
 const routes = [
-  {path:'/',component:login},
+  { path:'/', component:login },
   {  
     path: '/home',   
     component: Home,  

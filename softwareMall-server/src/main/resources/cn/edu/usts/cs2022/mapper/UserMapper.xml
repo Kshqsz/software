@@ -3,6 +3,10 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="cn.edu.usts.cs.2022.mapper.UserMapper">
+<mapper namespace="cn.edu.usts.cs2022.mapper.UserMapper">
 
+    <insert id="register">
+        insert into user(username, password, avatar, phone, create_time, update_time )
+        values (#{username}, #{password}, #{avatar}, #{phone}, #{createTime}, #{updateTime})
+    </insert>
 </mapper>

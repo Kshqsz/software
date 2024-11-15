@@ -8,15 +8,20 @@ const router = createRouter({
       path: '/login',
       component: () => import ('@/views/login/LoginPage.vue')
     },
-
-    {
-      path: '/',
-      component: () => import ('@/views/login/LoginPage.vue')
-    },
     {
       path: '/home',
-      component: () => import('@/views/layout/LayoutContainer.vue')
-    }
+      component: () => import('@/views/layout/LayoutContainer.vue'),
+      redirect: '/homePage',
+      children: [
+        { path: '/homePage', component: () => import('@/views/home/HomePage.vue')},
+        { path: '/searchResult', component: () => import('@/views/home/SearchResult.vue')},
+        { path: '/productDetail/:id', component: () => import('@/views/product/ProductDetail.vue')}
+      ]
+    },
+    {
+      path: '/',
+      redirect: '/login'
+    },
   ],
 })
 
