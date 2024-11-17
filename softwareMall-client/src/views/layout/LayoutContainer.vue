@@ -24,6 +24,9 @@ const logout = () => {
   router.push("/");
   ElMessage.success("退出登录成功~")
 }
+const goToUserCenter = () => {
+  router.push("/userCenter")
+} 
 </script>
 
 <template>
@@ -44,7 +47,7 @@ const logout = () => {
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item>个人中心</el-dropdown-item>
+              <el-dropdown-item @click="goToUserCenter">个人中心</el-dropdown-item>
               <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>

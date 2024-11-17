@@ -15,8 +15,16 @@ const router = createRouter({
       children: [
         { path: '/homePage', component: () => import('@/views/home/HomePage.vue')},
         { path: '/searchResult', component: () => import('@/views/home/SearchResult.vue')},
-        { path: '/productDetail/:id', component: () => import('@/views/product/ProductDetail.vue')}
-      ]
+        { path: '/productDetail/:id', component: () => import('@/views/product/ProductDetail.vue')},
+        { 
+          path: '/userCenter', 
+          component: () => import('@/views/user/UserCenter.vue'),
+          redirect: '/profile',
+          children: [
+            { path: '/profile', component: () => import('@/views/user/Profile.vue')},
+          ]
+        }
+      ] 
     },
     {
       path: '/',
