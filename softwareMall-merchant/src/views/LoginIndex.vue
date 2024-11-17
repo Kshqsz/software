@@ -1,8 +1,8 @@
 <script setup>  
 import { ref } from 'vue';  
 import { useRouter } from 'vue-router';  
-import { adminLoginService } from '@/api/admin';
-import { useAdminStore} from '@/stores';
+import { merchantLoginService } from '@/api/merchant';
+import { useMerchantStore} from '@/stores'; 
 const form = ref({  
   username: '',  
   password: '',  
@@ -15,24 +15,7 @@ const registerForm = ref({
   confirmPassword: '',  
 });  
 
-/* const registerRules = {  
-  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],  
-  password: [{ required: true, message: '请输入密码', trigger: 'blur' }],  
-  confirmPassword: [  
-    { required: true, message: '请确认密码', trigger: 'blur' },  
-    { validator: validatePassword, trigger: 'blur' },  
-  ],  
-};   */
-
 const registerFormRef = ref(null);  
-
-/* const validatePassword = (rule, value, callback) => {  
-  if (value !== registerForm.value.password) {  
-    callback(new Error('两次输入的密码不一致'));  
-  } else {  
-    callback();  
-  }  
-};   */
 
  const handleRegister = async () => {  
   registerFormRef.value.validate(async (valid) => {  
@@ -48,10 +31,6 @@ const registerFormRef = ref(null);
   });  
 };  
 
-
-
-
-
 const rules = {  
   username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],  
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }],  
@@ -60,33 +39,13 @@ const rules = {
 const formRef = ref(null);  
 const router = useRouter();  
 
-const adminStore = useAdminStore()
 
 const handleLogin = async () => {  
-  const res = await adminLoginService(form.value)
-  adminStore.setToken(res.data.token)
+  const res = await merchantLoginService(form.value)
+  useMerchantStore.setToken(res.data.token) 
  // ElMessage.success("登录成功");
   router.push('/home'); 
-  // 验证数据是否合法
-  /* formRef.value.validate(async (valid) => {  
-    if (valid) {  
-      try {  
-        //发送请求携带数据
-        const response = await axios.post('/admin/login', {  
-          username: form.username,  
-          password: form.password,  
-        });  
-        // 处理登录成功的逻辑,保存 token到UserStore,跳转到home页面   
-        UserStore.setItem(response.data.token);
-        ElMessage.success('登录成功')  
-        router.push('/home');  
-      } catch (error) {  
-        // 处理登录失败的逻辑,例如显示错误消息  
-        console.error(error);  
-        ElMessage.error('登录失败,请检查用户名和密码');  
-      }  
-    }  
-  });   */
+
 };  
 </script>  
 
@@ -144,7 +103,6 @@ const handleLogin = async () => {
   background-repeat: no-repeat; 
   background-image: url('../assets/img/IMG_20220902_152937.jpg');
 }  
-
 .login-card {  
   width: 400px;  
 }  

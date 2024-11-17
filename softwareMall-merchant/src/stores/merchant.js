@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-export const useAdminStore = defineStore('admin', () => {
+export const useMerchantStore = defineStore('merchant', () => {
     const token = ref('')
     const setToken = (newToken) => {
         token.value = newToken

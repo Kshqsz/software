@@ -1,6 +1,7 @@
 <template>  
   <div class="order-management-container">  
     <h2>订单管理</h2>  
+    <!-- 订单过滤器 -->  
     <div class="filters">  
       <div class="filter-item">  
         <span>订单编号:</span>  
@@ -8,6 +9,8 @@
         <el-button type="primary" @click="searchOrders">查询</el-button>  
       </div>  
     </div>  
+
+    <!-- 订单列表表格 -->  
     <el-table :data="paginatedOrders" style="width: 100%">  
       <el-table-column prop="id" label="订单ID" width="120"></el-table-column>  
       <el-table-column prop="orderNo" label="订单编号" width="180"></el-table-column>  
@@ -25,6 +28,8 @@
         </template>  
       </el-table-column>  
     </el-table>  
+
+    <!-- 分页控件 -->  
     <div class="pagination">  
       <el-pagination  
         v-model:current-page="currentPage"  
@@ -40,6 +45,7 @@
 <script setup>  
 import { ref, computed } from 'vue';  
 
+// 订单列表数据  
 const orderList = ref([  
   {  
     id: 1,  
@@ -59,21 +65,16 @@ const orderList = ref([
     buyer: '王五',  
     status: '未支付',  
   },  
-  {  
-    id: 3,  
-    orderNo: '202301020001',  
-    product: '耳机',  
-    productLink: 'https://example.com/headphones',  
-    tradeTime: '2023-01-02 09:00:00',  
-    buyer: '小明',  
-    status: '已取消',  
-  },  
 ]);  
 
+// 当前页码和每页数量  
 const currentPage = ref(1);  
 const pageSize = ref(10);  
+
+// 订单编号过滤器  
 const orderNo = ref('');  
 
+// 根据订单编号过滤订单列表  
 const filteredOrders = computed(() => {  
   let orders = [...orderList.value];  
   if (orderNo.value) {  
@@ -84,12 +85,14 @@ const filteredOrders = computed(() => {
   return orders;  
 });  
 
+// 分页后的订单列表  
 const paginatedOrders = computed(() => {  
   const start = (currentPage.value - 1) * pageSize.value;  
   const end = start + pageSize.value;  
   return filteredOrders.value.slice(start, end);  
 });  
 
+// 根据订单状态获取对应的标签类型  
 const getStatusTagType = (status) => {  
   switch (status) {  
     case '已完成':  
@@ -103,10 +106,12 @@ const getStatusTagType = (status) => {
   }  
 };  
 
+// 点击查询按钮时的处理函数  
 const searchOrders = () => {  
   currentPage.value = 1;  
 };  
 
+// 分页切换时的处理函数  
 const handlePageChange = () => {  
   // 处理分页切换  
 };  
