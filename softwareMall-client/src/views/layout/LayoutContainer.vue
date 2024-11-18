@@ -7,7 +7,16 @@ import { useUserStore } from '@/stores';
 import { ElMessage } from 'element-plus';
 const searchInfo = ref('')
 // 顶部导航文字
-const navItems = ref(["Xiaomi手机", "Redmi手机", "电视", "笔记本", "平板", "家电", "服务中心", "社区"])
+const dialogTableVisible = ref(false)
+const navItems = ref([
+  { name: "首页", path: "/home" },
+  { name: "管理系统", path: "/management" },
+  { name: "开发工具", path: "/tools" },
+  { name: "操作系统", path: "/os" },
+  { name: "设计工具", path: "/design" },
+  { name: "办公与协作", path: "/collaboration" },
+  { name: "关于我们", path: "/about" }
+]);
 // const userStore = useUserStore();
 // if (userStore.token != '') {
 //   navItems.value.push("个人中心")
@@ -18,6 +27,15 @@ const username = userStore.username
 const search = () => {
   router.push({ path: '/searchResult', query: { query: searchInfo.value } })
 }
+
+const navigateTo = (path) => {
+  if (path == '/about') {
+    dialogTableVisible.value = true;
+
+  } else {
+    router.push(path);
+  }
+};
 const logout = () => {
   userStore.removeToken();
   userStore.removeUsername();
@@ -27,17 +45,32 @@ const logout = () => {
 const goToUserCenter = () => {
   router.push("/userCenter")
 } 
+const goToHome = () => {
+  router.push("/home")
+}
+const gridData = [
+  { name: '韩守坤', from: '苏州科技大学'},
+  { name: '郁竹一', from: '苏州科技大学'},
+  { name: '吴纡怀', from: '苏州科技大学'},
+  { name: '陈松',   from: '苏州科技大学'}
+]
 </script>
 
 <template>
+  <el-dialog v-model="dialogTableVisible" title="About us" width="800">
+    <el-table :data="gridData">
+      <el-table-column property="name" label="Name" width="200" />
+      <el-table-column property="from" label="From" />
+    </el-table>
+  </el-dialog>
   <div class="page-layout">
     <!-- 顶部导航栏 -->
     <el-header height="60px" class="top-nav">
       <!-- Logo -->
-      <h1 class="title">Xiaomi</h1>
+      <h1 class="title" @click="goToHome">SoftWare</h1>
       <!-- 导航文字居中 -->
       <div class="nav-items">
-        <span v-for="(item, index) in navItems" :key="index">{{ item }}</span>
+        <span v-for="(item, index) in navItems" :key="index" @click="navigateTo(item.path)">{{ item.name }}</span>
         <el-dropdown class="user-dropdown">
           <span>
             {{ username}}
@@ -82,6 +115,7 @@ const goToUserCenter = () => {
 .title {
   padding-top: 15px;
   margin-left: 120px;
+  cursor: pointer;
 }
 
 .nav-items {
@@ -90,6 +124,7 @@ const goToUserCenter = () => {
   gap: 15px;
   font-size: 16px;
   justify-content: center;
+  cursor: pointer;
 }
 
 .search-box {

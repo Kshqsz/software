@@ -136,6 +136,7 @@ const getStatIcon = (index) => {
 }
 
 .stat-item {
+  cursor: pointer; 
   display: flex;
   align-items: center;
   width: calc(40% - 20px);
@@ -145,6 +146,10 @@ const getStatIcon = (index) => {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   height: 210px;
   padding-left: 20px;
+}
+.stat-item:hover {
+  transform: scale(1.05);  /* 放大卡片 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);  /* 添加阴影效果 */
 }
 
 .stat-icon {

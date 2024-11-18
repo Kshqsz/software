@@ -10,16 +10,16 @@ const imageList = ref([
 ])
 // 侧边栏菜单数据
 const menuItems = ref([
-  { id: 0, title: '手机', subItems: ['小米手机', 'Redmi手机', '智能穿戴'] },
-  { id: 1, title: '电视', subItems: ['LED电视', 'OLED电视', '智能电视'] },
-  { id: 2, title: '家电', subItems: ['冰箱', '洗衣机', '空调'] },
-  { id: 3, title: '笔记本 平板 显示器', subItems: ['笔记本电脑', '平板', '显示器'] },
-  { id: 4, title: '出行 穿戴', subItems: ['智能手表', '耳机'] },
-  { id: 5, title: '耳机 音箱', subItems: ['无线耳机', '蓝牙音箱'] },
-  { id: 6, title: '健康 儿童', subItems: ['健康设备', '儿童玩具'] },
-  { id: 7, title: '生活 箱包', subItems: ['旅行箱包', '家居用品'] },
-  { id: 8, title: '智能 路由器', subItems: ['智能家居设备', '路由器'] },
-])
+  { id: 0, title: '开发工具', subItems: ['代码编辑器', 'IDE集成开发环境', '版本控制工具'] },
+  { id: 1, title: '设计工具', subItems: ['平面设计', 'UI/UX设计', '3D建模'] },
+  { id: 2, title: '办公与协作', subItems: ['文档编辑', '项目管理', '在线会议'] },
+  { id: 3, title: '教育与学习', subItems: ['语言学习', '编程课程', '在线教育平台'] },
+  { id: 4, title: '安全与优化', subItems: ['杀毒软件', '系统清理工具', '密码管理器'] },
+  { id: 5, title: '操作系统', subItems: ['Windows', 'Linux', 'macOS'] },
+  { id: 6, title: '企业软件', subItems: ['ERP系统', 'CRM系统', '数据分析工具'] },
+  { id: 7, title: '游戏与娱乐', subItems: ['PC游戏', '模拟器', '多媒体工具'] },
+  { id: 8, title: '其他', subItems: ['开源项目支持', 'API接口工具', '定制开发服务'] },
+]);
 </script>
 
 
