@@ -17,7 +17,6 @@
       <div class="account-security">
         <p>账户安全：<span class="security-level">{{ userInfo.security }}</span></p>
         <p>绑定手机：{{ userInfo.phone }}</p>
-        <p>绑定邮箱：{{ userInfo.email }}</p>
       </div>
     </div>
 

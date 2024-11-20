@@ -34,6 +34,10 @@ public class UserController {
         if (user == null) {
             return Result.error("用户名或密码错误");
         } else {
+            Integer status = user.getStatus();
+            if (status == 0) {
+                return Result.error("用户已被禁用！请联系管理员");
+            }
             Map<String, Object> claims = new HashMap<>();
             claims.put("id", user.getId());
             String token = JwtUtil.genToken(claims);

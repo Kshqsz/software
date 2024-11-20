@@ -6,7 +6,7 @@
 <mapper namespace="cn.edu.usts.cs2022.mapper.UserMapper">
 
     <insert id="register">
-        insert into user(username, password, avatar, phone, create_time, update_time )
-        values (#{username}, #{password}, #{avatar}, #{phone}, #{createTime}, #{updateTime})
+        insert into user(username, password, avatar, phone, status, create_time, update_time )
+        values (#{username}, #{password}, #{avatar}, #{phone}, #{status}, #{createTime}, #{updateTime})
     </insert>
 </mapper>
