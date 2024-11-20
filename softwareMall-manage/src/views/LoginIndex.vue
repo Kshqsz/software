@@ -20,29 +20,12 @@ const adminStore = useAdminStore()
 
 const handleLogin = async () => {  
   const res = await adminLoginService(form.value)
-  adminStore.setToken(res.data.token)
-  ElMessage.success("登录成功");
+  adminStore.setToken(res.data.data)
+ // ElMessage.success("登录成功");
+ console.log('1111')
+  console.log(adminStore.token)
   router.push('/home'); 
-  // 验证数据是否合法
-  /* formRef.value.validate(async (valid) => {  
-    if (valid) {  
-      try {  
-        //发送请求携带数据
-        const response = await axios.post('/admin/login', {  
-          username: form.username,  
-          password: form.password,  
-        });  
-        // 处理登录成功的逻辑,保存 token到UserStore,跳转到home页面   
-        UserStore.setItem(response.data.token);
-        ElMessage.success('登录成功')  
-        router.push('/home');  
-      } catch (error) {  
-        // 处理登录失败的逻辑,例如显示错误消息  
-        console.error(error);  
-        ElMessage.error('登录失败,请检查用户名和密码');  
-      }  
-    }  
-  });   */
+  
 };  
 </script>  
 

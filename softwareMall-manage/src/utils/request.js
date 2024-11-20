@@ -17,6 +17,7 @@ instance.interceptors.request.use(
         const adminStore = useAdminStore()
         if (adminStore.token) {
             config.headers.Authorization = adminStore.token
+            
         }
         return config
     },
@@ -38,7 +39,7 @@ instance.interceptors.response.use(
     (err) => {
         // TODO 5. 处理401错误
         if (err.response?.status === 401) {
-            router.push("/login")
+            router.push("/")
         }
 
         // 错误默认提示
