@@ -1,8 +1,7 @@
 <script setup>
 import { ref } from 'vue'
-import { Search } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router';
-import { ArrowDown } from '@element-plus/icons-vue'
+import { ArrowDown, Search } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores';
 import { ElMessage } from 'element-plus';
 const searchInfo = ref('')
@@ -116,7 +115,7 @@ const gridData = [
         v-model="searchInfo"
         placeholder="搜索商品"
         :prefix-icon="Search"
-        @keydown.enter="search"
+        @keydown.enter="search()"
         class="search-box"
         size="small"
       ></el-input>

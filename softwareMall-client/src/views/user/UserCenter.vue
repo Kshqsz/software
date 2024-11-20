@@ -1,30 +1,5 @@
-<template>
-  <div class="user-center">
-    <!-- 页面布局 -->
-    <div class="user-center-layout">
-      <!-- 左侧导航 -->
-      <el-card class="sidebar" shadow="never">
-        <div v-for="(menu, index) in menuItems" :key="index" class="menu-section">
-          <h3>{{ menu.category }}</h3>
-          <ul>
-            <li 
-              v-for="(item, idx) in menu.items" 
-              :key="idx"
-              :class="{ active: item.route === currentRoute }"
-              @click="navigateTo(item.route)"
-            >
-              {{ item.label }}
-            </li>
-          </ul>
-        </div>
-      </el-card>
-      <!-- 右侧内容 -->
-        <router-view />
-    </div>
-  </div>
-</template>
-
 <script setup>
+import { watch } from 'vue';
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router';
 
@@ -56,12 +31,42 @@ const route = useRoute()
 const router = useRouter()
 const currentRoute = ref(route.path)
 
+watch(() => route.path, (newPath) => {
+  currentRoute.value = newPath;
+});
+
 // 跳转到指定路由
 const navigateTo = (route) => {
   router.push(route)
   currentRoute.value = route
 }
 </script>
+
+<template>
+  <div class="user-center">
+    <!-- 页面布局 -->
+    <div class="user-center-layout">
+      <!-- 左侧导航 -->
+      <el-card class="sidebar" shadow="never">
+        <div v-for="(menu, index) in menuItems" :key="index" class="menu-section">
+          <h3>{{ menu.category }}</h3>
+          <ul>
+            <li 
+              v-for="(item, idx) in menu.items" 
+              :key="idx"
+              :class="{ active: item.route === currentRoute }"
+              @click="navigateTo(item.route)"
+            >
+              {{ item.label }}
+            </li>
+          </ul>
+        </div>
+      </el-card>
+      <!-- 右侧内容 -->
+        <router-view />
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .user-center {

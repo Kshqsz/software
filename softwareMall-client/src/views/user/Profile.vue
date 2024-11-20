@@ -1,3 +1,38 @@
+<script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router';
+// 用户信息
+const userInfo = ref({
+  name: 'Ksh',
+  greeting: '晚上好~',
+  security: '较高',
+  phone: '185*****12',
+  email: '24******8@qq.com',
+  stats: [
+    { label: '我的订单', count: 0, path: '/orders' },
+    { label: '待收货的订单', count: 0, path: '' },
+    { label: '待评价商品数', count: 1, path: '' },
+    { label: '喜欢的商品', count: 1, path: '/favorites' }
+  ]
+})
+const router = useRouter()
+// 获取统计项颜色
+const getStatColor = (index) => {
+  const colors = ['#FF7F00', '#67C23A', '#409EFF', '#F7BA2A']
+  return colors[index % colors.length]
+}
+
+// 获取统计项图标
+const getStatIcon = (index) => {
+  const icons = ['el-icon-wallet', 'el-icon-truck', 'el-icon-message', 'el-icon-star-on']
+  return icons[index % icons.length]
+}
+
+const goToDetail = (stat) => {
+  router.push(stat.path)
+}
+</script>
+
 <template>
   <!-- 右侧内容 -->
   <el-card class="content" shadow="never">
@@ -28,6 +63,7 @@
         v-for="(stat, index) in userInfo.stats"
         :key="index"
         class="stat-item"
+        @click="goToDetail(stat)"
       >
         <el-card class="stat-icon" shadow = "never":style="{ backgroundColor: stat.color || getStatColor(index) }" >
           <i :class="getStatIcon(index)"></i>
@@ -40,37 +76,7 @@
       </div>
     </div>
   </el-card>
-  </template>
-  
-<script setup>
-import { ref } from 'vue'
-// 用户信息
-const userInfo = ref({
-  name: 'Ksh',
-  greeting: '晚上好~',
-  security: '较高',
-  phone: '185*****12',
-  email: '24******8@qq.com',
-  stats: [
-    { label: '待支付的订单', count: 0 },
-    { label: '待收货的订单', count: 0 },
-    { label: '待评价商品数', count: 1 },
-    { label: '喜欢的商品', count: 1 }
-  ]
-})
-  
-// 获取统计项颜色
-const getStatColor = (index) => {
-  const colors = ['#FF7F00', '#67C23A', '#409EFF', '#F7BA2A']
-  return colors[index % colors.length]
-}
-
-// 获取统计项图标
-const getStatIcon = (index) => {
-  const icons = ['el-icon-wallet', 'el-icon-truck', 'el-icon-message', 'el-icon-star-on']
-  return icons[index % icons.length]
-}
-</script>
+</template>
 
 <style scoped>
 .content {

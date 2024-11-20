@@ -22,6 +22,8 @@ const router = createRouter({
           redirect: '/profile',
           children: [
             { path: '/profile', component: () => import('@/views/user/Profile.vue')},
+            { path: '/orders', component: () => import('@/views/user/Orders.vue')},
+            { path: '/favorites', component: () => import('@/views/user/Favorites.vue')}
           ]
         }
       ] 

@@ -73,7 +73,6 @@
 
 <script setup>  
 import { ref } from 'vue';  
-import { Plus } from '@element-plus/icons-vue';  
 
 const userInfo = ref({  
   username: 'John Doe',  
