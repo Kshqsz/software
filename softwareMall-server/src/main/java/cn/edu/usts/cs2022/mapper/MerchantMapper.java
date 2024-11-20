@@ -1,0 +1,18 @@
+package cn.edu.usts.cs2022.mapper;
+
+import cn.edu.usts.cs2022.pojo.po.Merchant;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+@Mapper
+public interface MerchantMapper {
+    @Select("select * from merchant where username = #{username} and password = #{password}")
+    Merchant login(@Param("username") String username,
+                   @Param("password") String password);
+
+    @Select("select * from merchant where username = #{username}")
+    Merchant getMerchantByUsername(@Param("username") String username);
+
+    void register(Merchant merchant);
+}

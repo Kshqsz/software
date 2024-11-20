@@ -8,7 +8,6 @@ spring:
     username: root
     password: hsk200311
 
-
   servlet:
     multipart:
       max-file-size: 50MB

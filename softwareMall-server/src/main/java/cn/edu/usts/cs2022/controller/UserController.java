@@ -39,7 +39,7 @@ public class UserController {
                 return Result.error("用户已被禁用！请联系管理员");
             }
             Map<String, Object> claims = new HashMap<>();
-            claims.put("id", user.getId());
+            claims.put("userId", user.getId());
             String token = JwtUtil.genToken(claims);
             UserDTO userDTO = new UserDTO();
             userDTO.setUser(user);

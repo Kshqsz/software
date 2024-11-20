@@ -4,32 +4,23 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
+public class Merchant {
     private Integer id;
 
-    private String name;
+    private String username;
 
-    private BigDecimal price;
+    private String password;
 
-    private Integer merchantId;
+    private String avatar;
 
-    private Integer categoryId;
-
-    private String video;
-
-    private String image;
-
-    private String source;
+    private String phone;
 
     private Integer status;
-
-    private String description;
 
     private LocalDateTime createTime;
 

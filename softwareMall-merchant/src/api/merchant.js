@@ -6,7 +6,9 @@ export const merchantLoginService = ({ username, password }) => {
 }
 
 //注册账号 /merchant/regeits  post
- 
+export const merchantRegisterService = ({ username, password, rePassword }) => {
+    return request.post("/merchant/register", { username, password, rePassword });
+}
 //查询拥有的所有软件 /mrechant get
 
 
@@ -15,6 +17,7 @@ export const merchantLoginService = ({ username, password }) => {
 //下架商品   /merchant post 修改状态即可
 
 //添加新商品  
+export const merchantAddProductService = ({})
 
 //条件查询商品
 

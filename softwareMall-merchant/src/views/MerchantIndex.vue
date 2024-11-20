@@ -1,3 +1,63 @@
+<script setup>  
+import { ref } from 'vue';  
+import { useMerchantStore } from '@/stores';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const merchantStore = useMerchantStore()
+const userInfo = ref(merchantStore.merchant)
+// const userInfo = ref({  
+//   username: '',  
+//   phone: '',  
+//   avatar: 'https://via.placeholder.com/80',  
+// });  
+
+
+const editForm = ref({  
+  username: userInfo.value.username,  
+  phone: userInfo.value.phone,  
+  avatar: userInfo.value.avatar,  
+});  
+
+const showEditDialog = ref(false);  
+const showChangePasswordDialog = ref(false);  
+
+const passwordForm = ref({  
+  oldPassword: '',  
+  newPassword: '',  
+  confirmPassword: '',  
+});  
+
+const handleAvatarSuccess = (response, uploadFile) => {  
+  editForm.value.avatar = URL.createObjectURL(uploadFile.raw);  
+};  
+
+const beforeAvatarUpload = (file) => {  
+  const isJPG = file.type === 'image/jpeg';  
+  const isLt2M = file.size / 1024 / 1024 < 2;  
+
+  if (!isJPG) {  
+   // ElMessage.error('头像图片只能是 JPG 格式!');  
+  }  
+  if (!isLt2M) {  
+   // ElMessage.error('头像图片大小不能超过 2MB!');  
+  }  
+  return isJPG && isLt2M;  
+};  
+
+const saveUserInfo = () => {  
+  // 执行保存用户信息的逻辑  
+  console.log('保存用户信息:', editForm.value);  
+  showEditDialog.value = false;  
+};  
+
+const changePassword = () => {  
+  // 执行修改密码的逻辑  
+  console.log('修改密码:', passwordForm.value);  
+  showChangePasswordDialog.value = false;  
+};  
+</script>  
+
 <template>  
   <div class="merchant-info-container">  
     <el-card class="box-card">  
@@ -71,66 +131,12 @@
   </div>  
 </template>  
 
-<script setup>  
-import { ref } from 'vue';  
-
-const userInfo = ref({  
-  username: 'John Doe',  
-  phone: '123-456-7890',  
-  avatar: 'https://via.placeholder.com/80',  
-});  
-
-const editForm = ref({  
-  username: userInfo.value.username,  
-  phone: userInfo.value.phone,  
-  avatar: userInfo.value.avatar,  
-});  
-
-const showEditDialog = ref(false);  
-const showChangePasswordDialog = ref(false);  
-
-const passwordForm = ref({  
-  oldPassword: '',  
-  newPassword: '',  
-  confirmPassword: '',  
-});  
-
-const handleAvatarSuccess = (response, uploadFile) => {  
-  editForm.value.avatar = URL.createObjectURL(uploadFile.raw);  
-};  
-
-const beforeAvatarUpload = (file) => {  
-  const isJPG = file.type === 'image/jpeg';  
-  const isLt2M = file.size / 1024 / 1024 < 2;  
-
-  if (!isJPG) {  
-   // ElMessage.error('头像图片只能是 JPG 格式!');  
-  }  
-  if (!isLt2M) {  
-   // ElMessage.error('头像图片大小不能超过 2MB!');  
-  }  
-  return isJPG && isLt2M;  
-};  
-
-const saveUserInfo = () => {  
-  // 执行保存用户信息的逻辑  
-  console.log('保存用户信息:', editForm.value);  
-  showEditDialog.value = false;  
-};  
-
-const changePassword = () => {  
-  // 执行修改密码的逻辑  
-  console.log('修改密码:', passwordForm.value);  
-  showChangePasswordDialog.value = false;  
-};  
-</script>  
-
 <style scoped>  
 .merchant-info-container {  
   display: flex;  
   justify-content: center;  
   align-items: center;  
-  height: 100vh;  
+  height: 95vh;  
   background-color: #f5f5f5;  
 }  
 
