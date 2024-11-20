@@ -29,9 +29,7 @@
         </template>  
       </el-table-column>  
       <el-table-column prop="name" label="软件名称" />  
-      <el-table-column prop="description" label="软件描述" />  
       <el-table-column prop="price" label="软件价格" />  
-      <el-table-column prop="link" label="软件链接" />  
       <el-table-column prop="category" label="软件分类" />  
       <el-table-column prop="seller" label="商家" />  
       <el-table-column label="操作">  
@@ -135,8 +133,8 @@ const sortProducts = () => {
 };  
 
 const searchProducts = () => {  
-  currentPage.value = 1 
-}
+  currentPage.value = 1;  
+};  
 </script>  
 
 <style scoped>  
@@ -149,16 +147,15 @@ const searchProducts = () => {
   display: flex;  
   justify-content: space-between;  
   align-items: center;  
-  margin-bottom: 20px;
+  margin-bottom: 20px;  
 }  
 .filter-item {  
   display: flex;  
   align-items: center;  
 }  
-.filter-item span { 
-  margin-right: 10px;
-  width: 130px; 
-  
+.filter-item span {  
+  margin-right: 10px;  
+  width: 130px;  
 }  
 .filter-item .el-input,  
 .filter-item .el-select {  

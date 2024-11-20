@@ -5,6 +5,7 @@ import login from '../views/LoginIndex.vue'
 import Product from '../views/ProductManage.vue'
 import Home from '../views/HomeIndex.vue'
 import Order from '../views/OrderIndex.vue'
+import Merchant from '../views/MerchantIndex.vue'
 
 
 const routes = [
@@ -16,6 +17,7 @@ const routes = [
     children: [        
       { path: 'product', component: Product },       
       { path: 'order',component: Order },
+      {path: 'merchant',component:Merchant},
     ],  
   },  
 
