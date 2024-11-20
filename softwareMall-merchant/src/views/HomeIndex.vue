@@ -74,7 +74,7 @@ const handleLogout = () => {
 
 <style scoped>  
 .home-container {  
-  height: 100vh;  
+  height: 98vh;  
 }  
 
 .header {  

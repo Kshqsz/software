@@ -1,7 +1,7 @@
 <script setup>  
 import { ref } from 'vue';  
 import { useRouter } from 'vue-router';  
-import { merchantLoginService } from '@/api/merchant';
+import { merchantLoginService, merchantRegisterService } from '@/api/merchant';
 import { useMerchantStore} from '@/stores'; 
 const form = ref({  
   username: '',  
@@ -12,17 +12,19 @@ const showRegisterModal = ref(false);
 const registerForm = ref({  
   username: '',  
   password: '',  
-  confirmPassword: '',  
+  rePassword: '',  
 });  
 
 const registerFormRef = ref(null);  
+const merchantStore = useMerchantStore();
 
  const handleRegister = async () => {  
   registerFormRef.value.validate(async (valid) => {  
     if (valid) {  
       try {  
         // 在这里添加注册的逻辑,例如调用后端 API 进行注册  
-        console.log('注册成功:', registerForm.value);  
+        await merchantRegisterService(registerForm.value)
+        ElMessage.success("注册成功~")
         showRegisterModal.value = false;  
       } catch (error) {  
         console.error('注册失败:', error);  
@@ -42,10 +44,11 @@ const router = useRouter();
 
 const handleLogin = async () => {  
   const res = await merchantLoginService(form.value)
-  useMerchantStore.setToken(res.data.token) 
- // ElMessage.success("登录成功");
+  merchantStore.setToken(res.data.data.token) 
+  merchantStore.setMerchant(res.data.data.merchant)
+  console.log(merchantStore.merchant)
+  ElMessage.success("登录成功");
   router.push('/home'); 
-
 };  
 </script>  
 
@@ -59,7 +62,7 @@ const handleLogin = async () => {
         </el-form-item>  
 
         <el-form-item label="密码" prop="password">  
-          <el-input type="password" v-model="form.password" placeholder="请输入密码"></el-input>  
+          <el-input type="password" v-model="form.password" placeholder="请输入密码" @keydown.enter="handleLogin"></el-input>  
         </el-form-item>  
 
         <el-form-item>  
@@ -76,8 +79,8 @@ const handleLogin = async () => {
     <el-form-item label="密码" prop="password">  
       <el-input type="password" v-model="registerForm.password" placeholder="请输入密码"></el-input>  
     </el-form-item>  
-    <el-form-item label="确认密码" prop="confirmPassword">  
-      <el-input type="password" v-model="registerForm.confirmPassword" placeholder="请确认密码"></el-input>  
+    <el-form-item label="确认密码" prop="rePassword">  
+      <el-input type="password" v-model="registerForm.rePassword" placeholder="请确认密码"></el-input>  
     </el-form-item>  
   </el-form>  
   <template #footer>  
@@ -97,11 +100,11 @@ const handleLogin = async () => {
   display: flex;  
   align-items: center;  
   justify-content: center;  
-  height: 100vh;  
+  height: 98vh;  
   background-size: cover; 
   background-position: center;  
   background-repeat: no-repeat; 
-  background-image: url('../assets/img/IMG_20220902_152937.jpg');
+  background-image: url('../assets/img/bk1.png');
 }  
 .login-card {  
   width: 400px;  

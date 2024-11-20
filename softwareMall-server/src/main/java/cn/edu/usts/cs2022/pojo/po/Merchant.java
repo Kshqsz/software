@@ -1,3 +1,4 @@
+
 package cn.edu.usts.cs2022.pojo.po;
 
 import lombok.AllArgsConstructor;
@@ -26,3 +27,4 @@ public class Merchant {
 
     private LocalDateTime updateTime;
 }
+

@@ -1,3 +1,134 @@
+<script setup>  
+import { ref, computed } from 'vue';  
+
+const products = ref([  
+  { name: 'Product 1', description: 'Description 1', price: 100, link: 'link1.com', image: 'image1.jpg', category: 'Category 1', status: 'published' },  
+  { name: 'Product 2', description: 'Description 2', price: 200, link: 'link2.com', image: 'image2.jpg', category: 'Category 2', status: 'pending' },  
+  { name: 'Product 3', description: 'Description 3', price: 300, link: 'link3.com', image: 'image3.jpg', category: 'Category 1', status: 'pending' }  
+]);  
+
+const sortType = ref('priceAsc');  
+const searchText = ref('');  
+const selectedCategory = ref('');  
+const currentPage = ref(1);  
+const pageSize = ref(10);  
+const addProductDialogVisible = ref(false);  
+const editProductDialogVisible = ref(false);  
+const addCategoryDialogVisible = ref(false); 
+const newProduct = ref({  
+  name: '',  
+  price: 0, 
+  categoryId: 0,
+  video: '', 
+  image: '',
+  source: '',
+  description: '',  
+});  
+const editedProduct = ref({});  
+const newCategory = ref('');  
+
+const filteredProducts = computed(() => {  
+  let filtered = [...products.value];  
+  if (searchText.value) {  
+    filtered = filtered.filter(product =>  
+      product.name.toLowerCase().includes(searchText.value.toLowerCase())  
+    );  
+  }  
+  if (selectedCategory.value) {  
+    filtered = filtered.filter(product => product.category === selectedCategory.value);  
+  }  
+  return filtered;  
+});  
+
+const paginatedProducts = computed(() => {  
+  const startIndex = (currentPage.value - 1) * pageSize.value;  
+  const endIndex = startIndex + pageSize.value;  
+  return filteredProducts.value.slice(startIndex, endIndex);  
+});  
+
+// const categories = computed(() => {  
+//   return [...new Set(products.value.map(product => product.category))];  
+// });  
+const categories = ref([])
+
+function sortProducts() {  
+  if (sortType.value === 'priceAsc') {  
+    products.value.sort((a, b) => a.price - b.price);  
+  } else {  
+    products.value.sort((a, b) => b.price - a.price);  
+  }  
+}  
+
+function searchProducts() {  
+  currentPage.value = 1;  
+}  
+
+function filterByCategory() {  
+  currentPage.value = 1;  
+}  
+
+function handlePageChange(page) {  
+  currentPage.value = page;  
+}  
+
+function showAddProductDialog() {  
+  addProductDialogVisible.value = true;  
+}  
+
+function addProduct() {  
+  products.value.push({ ...newProduct.value });  
+  addProductDialogVisible.value = false;  
+  newProduct.value = {  
+    name: '',  
+    description: '',  
+    price: 0,  
+    link: '',  
+    image: '',  
+    category: '',  
+    status: 'pending'  
+  };  
+}  
+
+function editProduct(product) {  
+  editedProduct.value = { ...product };  
+  editProductDialogVisible.value = true;  
+}  
+
+function updateProduct() {  
+  const index = products.value.findIndex(product => product.name === editedProduct.value.name);  
+  products.value[index] = { ...editedProduct.value };  
+  editProductDialogVisible.value = false;  
+}  
+
+function deleteProduct(product) {  
+  const index = products.value.indexOf(product);  
+  products.value.splice(index, 1);  
+}  
+
+function showAddCategoryDialog() {  
+  addCategoryDialogVisible.value = true;  
+}  
+
+function addCategory() {  
+  if (newCategory.value && !categories.value.includes(newCategory.value)) {  
+    products.value.push({  
+      name: newCategory.value,  
+      description: '',  
+      price: 0,  
+      link: '',  
+      image: '',  
+      category: newCategory.value,  
+      status: 'pending'  
+    });  
+    newCategory.value = '';  
+  }  
+  addCategoryDialogVisible.value = false;  
+}  
+
+//
+
+</script>  
+
 <template>  
   <div>  
     <h1>软件产品管理</h1>  
@@ -191,136 +322,6 @@
     </el-dialog>  
   </div>  
 </template>  
-
-<script setup>  
-import { ref, computed } from 'vue';  
-
-const products = ref([  
-  { name: 'Product 1', description: 'Description 1', price: 100, link: 'link1.com', image: 'image1.jpg', category: 'Category 1', status: 'published' },  
-  { name: 'Product 2', description: 'Description 2', price: 200, link: 'link2.com', image: 'image2.jpg', category: 'Category 2', status: 'pending' },  
-  { name: 'Product 3', description: 'Description 3', price: 300, link: 'link3.com', image: 'image3.jpg', category: 'Category 1', status: 'pending' }  
-]);  
-
-const sortType = ref('priceAsc');  
-const searchText = ref('');  
-const selectedCategory = ref('');  
-const currentPage = ref(1);  
-const pageSize = ref(10);  
-const addProductDialogVisible = ref(false);  
-const editProductDialogVisible = ref(false);  
-const addCategoryDialogVisible = ref(false);  
-const newProduct = ref({  
-  name: '',  
-  description: '',  
-  price: 0,  
-  link: '',  
-  image: '',  
-  category: '',  
-  status: 'pending'  
-});  
-const editedProduct = ref({});  
-const newCategory = ref('');  
-
-const filteredProducts = computed(() => {  
-  let filtered = [...products.value];  
-  if (searchText.value) {  
-    filtered = filtered.filter(product =>  
-      product.name.toLowerCase().includes(searchText.value.toLowerCase())  
-    );  
-  }  
-  if (selectedCategory.value) {  
-    filtered = filtered.filter(product => product.category === selectedCategory.value);  
-  }  
-  return filtered;  
-});  
-
-const paginatedProducts = computed(() => {  
-  const startIndex = (currentPage.value - 1) * pageSize.value;  
-  const endIndex = startIndex + pageSize.value;  
-  return filteredProducts.value.slice(startIndex, endIndex);  
-});  
-
-const categories = computed(() => {  
-  return [...new Set(products.value.map(product => product.category))];  
-});  
-
-function sortProducts() {  
-  if (sortType.value === 'priceAsc') {  
-    products.value.sort((a, b) => a.price - b.price);  
-  } else {  
-    products.value.sort((a, b) => b.price - a.price);  
-  }  
-}  
-
-function searchProducts() {  
-  currentPage.value = 1;  
-}  
-
-function filterByCategory() {  
-  currentPage.value = 1;  
-}  
-
-function handlePageChange(page) {  
-  currentPage.value = page;  
-}  
-
-function showAddProductDialog() {  
-  addProductDialogVisible.value = true;  
-}  
-
-function addProduct() {  
-  products.value.push({ ...newProduct.value });  
-  addProductDialogVisible.value = false;  
-  newProduct.value = {  
-    name: '',  
-    description: '',  
-    price: 0,  
-    link: '',  
-    image: '',  
-    category: '',  
-    status: 'pending'  
-  };  
-}  
-
-function editProduct(product) {  
-  editedProduct.value = { ...product };  
-  editProductDialogVisible.value = true;  
-}  
-
-function updateProduct() {  
-  const index = products.value.findIndex(product => product.name === editedProduct.value.name);  
-  products.value[index] = { ...editedProduct.value };  
-  editProductDialogVisible.value = false;  
-}  
-
-function deleteProduct(product) {  
-  const index = products.value.indexOf(product);  
-  products.value.splice(index, 1);  
-}  
-
-function showAddCategoryDialog() {  
-  addCategoryDialogVisible.value = true;  
-}  
-
-function addCategory() {  
-  if (newCategory.value && !categories.value.includes(newCategory.value)) {  
-    products.value.push({  
-      name: newCategory.value,  
-      description: '',  
-      price: 0,  
-      link: '',  
-      image: '',  
-      category: newCategory.value,  
-      status: 'pending'  
-    });  
-    newCategory.value = '';  
-  }  
-  addCategoryDialogVisible.value = false;  
-}  
-
-//
-
-</script>  
 
 <style>  
 .product-image {  

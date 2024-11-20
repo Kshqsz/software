@@ -20,6 +20,8 @@ public class WebConfig implements WebMvcConfigurer {
                 "/user/login",
                 "/user/register",
                 "/admin/login",
+                "/merchant/login",
+                "/merchant/register",
                 "/upload");
     }
 }

@@ -2,11 +2,13 @@
 import { ref } from 'vue'
 import car from '@/assets/xiaomi_car.jpg'
 import ultra from '@/assets/su7_ultra.jpg'
+import home1 from '@/assets/home1.png'
+import home2 from '@/assets/home2.png'
 
 // 图片轮播数据
 const imageList = ref([
-  {id: 0, url: car},
-  {id: 1, url: ultra}
+  {id: 2, url: home1},
+  {id: 3, url: home2}
 ])
 // 侧边栏菜单数据
 const menuItems = ref([
