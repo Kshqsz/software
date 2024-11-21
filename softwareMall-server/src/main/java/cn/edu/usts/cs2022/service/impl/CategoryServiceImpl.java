@@ -18,8 +18,43 @@ public class CategoryServiceImpl implements CategoryService {
         categoryMapper.add(categoryName);
     }
 
+    /**
+     * 获取全部分类
+     * @return
+     */
     @Override
     public List<Category> getAllCategory() {
         return categoryMapper.getAllCategory();
+    }
+
+    /**
+     * 新增分类
+     * @param category
+     */
+    @Override
+    public void insertCategory(Category category) {
+        categoryMapper.insertCategory(category);
+    }
+
+    /**
+     * 删除分类
+     * @param id
+     */
+    @Override
+    public void deleteCategory(Integer id) {
+        //TODO
+        //添加删除限制
+       /* adminMapper.selectProductByCategoryId(id)
+        if()*/
+        categoryMapper.deleteCategory(id);
+    }
+
+    /**
+     * 编辑分类
+     * @param category
+     */
+    @Override
+    public void updateCategory(Category category) {
+        categoryMapper.updatecategory(category);
     }
 }

@@ -7,18 +7,17 @@
           <img :src="scope.row.avatar" alt="Avatar" class="merchant-avatar" />  
         </template>  
       </el-table-column>  
-      <el-table-column prop="name" label="商家名称" />  
-      <el-table-column prop="email" label="邮箱" />  
+      <el-table-column prop="username" label="商家名称" />  
       <el-table-column prop="phone" label="手机号" />  
-      <el-table-column prop="createdAt" label="创建时间" />  
-      <el-table-column prop="updatedAt" label="最后修改时间" />  
+      <el-table-column prop="createTime" label="创建时间" />  
+      <el-table-column prop="updateTime" label="最后修改时间" />  
       <el-table-column prop="status" label="账号状态">  
         <template #default="scope">  
           <el-button  
-            :type="scope.row.status === 'active' ? 'success' : 'danger'"  
+            :type="scope.row.status == '1' ? 'success' : 'danger'"  
             @click="toggleStatus(scope.row)"  
           >  
-            {{ scope.row.status === 'active' ? '正常' : '禁用' }}  
+            {{ scope.row.status == '1' ? '正常' : '禁用' }}  
           </el-button>  
         </template>  
       </el-table-column>  
@@ -84,54 +83,41 @@
 
 <script setup>  
 import { reactive, ref, computed, onMounted } from 'vue';  
+import { getAllMerchant ,ChangeMerchantStatus} from '../api/merchant'
 
-const merchantList = reactive([  
-  {  
-    id: 1,  
-    avatar: 'https://via.placeholder.com/150',  
-    name: 'Acme Inc.',  
-    email: 'info@acme.com',  
-    phone: '1234567890',  
-    createdAt: '2023-04-01',  
-    updatedAt: '2023-04-15',  
-    status: 'active',  
-    originalStatus: 'active',  
-    products: [  
-      {  
-        id: 1,  
-        name: 'Product A',  
-        description: 'This is Product A',  
-        price: 9.99,  
-        link: 'https://example.com/product-a',  
-        image: 'https://via.placeholder.com/150',  
-        category: 'Category A',  
-      },  
-      {  
-        id: 2,  
-        name: 'Product B',  
-        description: 'This is Product B',  
-        price: 14.99,  
-        link: 'https://example.com/product-b',  
-        image: 'https://via.placeholder.com/150',  
-        category: 'Category B',  
-      },  
-      {  
-        id: 3,  
-        name: 'Product C',  
-        description: 'This is Product C',  
-        price: 19.99,  
-        link: 'https://example.com/product-c',  
-        image: 'https://via.placeholder.com/150',  
-        category: 'Category A',  
-      },  
-    ],  
-  },  
-  // 其他商家数据  
-]);  
+//获取所有商家列表实现
+const merchantList = reactive([]);    
+const getMerchant = async () => {  
+  try {  
+    const res = await getAllMerchant();  
+    console.log('获取用户成功:', res.data.data);  
+    // 使用 merchantList.splice 来确保响应式  
+    merchantList.splice(0, merchantList.length, ...res.data.data); // 这个步骤确保 userList 被更新并且是响应式的  
+  } catch (error) {  
+    console.error('获取用户失败:', error);  
+  }  
+};  
+
+
+
+
+//修改商家账号状态
+const status = ref({  
+  id: '',  
+  status: '',  
+});
 
 const toggleStatus = (row) => {  
-  row.status = row.status === 'active' ? 'inactive' : 'active';  
+  status.value.id = row.id
+  row.status = row.status == '1' ? '0' : '1';  
+  status.value.status = row.status
+  console.log(status.value.id)
+  console.log(status.value.status)
+  ChangeMerchantStatus(status.value)
+
 };  
+
+
 
 const showModal = ref(false);  
 const selectedMerchant = ref(null);  
@@ -172,7 +158,8 @@ const categories = computed(() => {
 });  
 
 onMounted(() => {  
-  // 在组件挂载时可以执行一些初始化操作  
+  getMerchant()  
+  console.log("查询商家列表成功")
 });  
 </script>  
 

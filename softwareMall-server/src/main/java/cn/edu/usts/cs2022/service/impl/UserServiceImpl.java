@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +17,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 用户登录
+     *
      * @param username
      * @param password
      * @return
@@ -39,5 +41,24 @@ public class UserServiceImpl implements UserService {
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
         userMapper.register(user);
+    }
+
+    /**
+     * 获取全部用户
+     *
+     * @return
+     */
+    @Override
+    public List<User> getUserList() {
+        return userMapper.selectAllUsers();
+    }
+
+    /**
+     * 修改用户状态
+     * @param user
+     */
+    @Override
+    public void changeUserStatus(User user) {
+        userMapper.changeStatus(user);
     }
 }

@@ -27,7 +27,7 @@
 
 <script setup>  
 import { ref } from 'vue';  
-import { admingetalluser,adminChangeStatus} from '@/api/admin';  
+import { admingetalluser,adminChangeStatus} from '@/api/user';  
 import { reactive, onMounted } from 'vue';  
 
   

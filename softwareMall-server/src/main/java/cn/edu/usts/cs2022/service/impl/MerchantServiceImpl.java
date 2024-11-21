@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,5 +33,24 @@ public class MerchantServiceImpl implements MerchantService {
         merchant.setCreateTime(LocalDateTime.now());
         merchant.setUpdateTime(LocalDateTime.now());
         merchantMapper.register(merchant);
+    }
+
+
+    /**
+     * 查询所有商家
+     * @return
+     */
+    @Override
+    public List<Merchant> getAllMerchant() {
+        return merchantMapper.selectAllMerchant();
+    }
+
+    /**
+     * 修改商家状态
+     * @param merchant
+     */
+    @Override
+    public void changeStatus(Merchant merchant) {
+        merchantMapper.changeStatus(merchant);
     }
 }

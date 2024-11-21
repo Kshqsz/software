@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -64,6 +65,30 @@ public class UserController {
         }
         userService.register(username, password);
         return Result.success();
+    }
+
+    /**
+     * 查询所有用户
+     *get
+     */
+    @GetMapping()
+    public Result<List<User>> getUserList() {
+        System.out.println("查询全部信息");
+        List<User> users = userService.getUserList();
+        for (User user : users) {
+            user.setPassword("*********");
+        }
+        return Result.success(users);
+    }
+
+    /**
+     * 修改用户状态
+     */
+
+    @PutMapping()
+    public Result changeUserStatus(@RequestBody User user) {
+        userService.changeUserStatus(user);
+        return Result.success("修改成功");
     }
 
 

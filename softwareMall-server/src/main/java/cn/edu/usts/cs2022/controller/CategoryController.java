@@ -14,7 +14,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService categoryService;
-
+    /**
+     * 新增分类
+     */
     @PostMapping("/add")
     public Result add(@RequestBody CategoryDTO categoryDTO) {
         String categoryName = categoryDTO.getName();
@@ -22,10 +24,32 @@ public class CategoryController {
         return Result.success();
     }
 
+    /**
+     * 查询所有分类
+     */
     @GetMapping("/all")
     public Result<List<Category>> getAllCategory() {
         List<Category> categoryList = categoryService.getAllCategory();
         return Result.success(categoryList);
+    }
+
+    /**
+     * 删除分类
+     */
+    @DeleteMapping("/{id}")
+    public Result deleteCategory(@PathVariable Integer id) {
+        System.out.println(id);
+        categoryService.deleteCategory(id);
+        return Result.success();
+    }
+
+    /**
+     * 编辑分类
+     */
+    @PutMapping()
+    public Result updateCategory(@RequestBody Category category) {
+        categoryService.updateCategory(category);
+        return Result.success();
     }
 
 }

@@ -38,7 +38,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
-import {admingetAllCategory , adminInsertCategory,admindeleteCategory ,adminUpdateCategory} from '../api/admin'
+import {admingetAllCategory , adminInsertCategory,admindeleteCategory ,adminUpdateCategory} from '../api/category'
 
 
 // 查询所有分类信息

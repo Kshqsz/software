@@ -18,7 +18,7 @@
         <span>软件分类:</span>  
         <el-select v-model="selectedCategory" @change="filterByCategory">  
           <el-option label="全部" value=""></el-option>  
-          <el-option v-for="category in categories" :key="category" :label="category" :value="category"></el-option>  
+          <el-option v-for="category in categories" :key="category.name" :label="category.name" :value="category.name"></el-option>  
         </el-select>  
       </div>  
     </div>  
@@ -51,7 +51,8 @@
 </template>  
 
 <script setup>  
-import { ref, reactive, computed } from 'vue';  
+import { ref, reactive, computed ,onMounted} from 'vue';  
+import {admingetAllCategory} from '../api/category'
 
 // 商品数据列表  
 const productList = reactive([  
@@ -65,30 +66,21 @@ const productList = reactive([
     category: '分类 A',  
     seller: '商家 A',  
   },  
-  {  
-    id: 2,  
-    name: '商品 B',  
-    description: '这是商品 B 的描述',  
-    price: 49.99,  
-    link: 'https://example.com/product-b',  
-    image: 'https://via.placeholder.com/150',  
-    category: '分类 B',  
-    seller: '商家 B',  
-  },  
-  {  
-    id: 3,  
-    name: '商品 C',  
-    description: '这是商品 C 的描述',  
-    price: 24.99,  
-    link: 'https://example.com/product-c',  
-    image: 'https://via.placeholder.com/150',  
-    category: '分类 C',  
-    seller: '商家 C',  
-  },  
 ]);  
 
-// 分类列表存放  
-const categories = ['分类 A', '分类 B', '分类 C'];  
+// 获取分类列表存放  
+const categories = reactive([]); 
+
+const getAllCategory = async () => {  
+  try {  
+    const res = await admingetAllCategory();  
+    console.log('获取用户成功:', res.data.data);  
+    // 确保响应式  
+    categories.splice(0, categories.length, ...res.data.data);   
+  } catch (error) {  
+    console.error('获取用户失败:', error);  
+  }  
+};  
 
 // 价格排序  
 const sortType = ref('priceAsc');  
@@ -135,6 +127,10 @@ const sortProducts = () => {
 const searchProducts = () => {  
   currentPage.value = 1;  
 };  
+onMounted(() => {  
+  getAllCategory()
+  console.log("获取分类成功")
+});
 </script>  
 
 <style scoped>  

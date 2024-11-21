@@ -8,12 +8,10 @@ import cn.edu.usts.cs2022.pojo.po.Result;
 import cn.edu.usts.cs2022.service.MerchantService;
 import cn.edu.usts.cs2022.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -22,6 +20,12 @@ import java.util.Map;
 public class MerchantController {
 
     private final MerchantService merchantService;
+
+    /**
+     * 商家登录
+     * @param loginDTO
+     * @return
+     */
     @PostMapping("/login")
     public Result login(@RequestBody LoginDTO loginDTO) {
         String username = loginDTO.getUsername();
@@ -46,6 +50,11 @@ public class MerchantController {
         }
     }
 
+    /**
+     * 商家注册
+     * @param registerDTO
+     * @return
+     */
     @PostMapping("/register")
     public Result Register(@RequestBody RegisterDTO registerDTO) {
         String username = registerDTO.getUsername();
@@ -62,4 +71,23 @@ public class MerchantController {
         merchantService.register(username, password);
         return Result.success();
     }
+
+    /**
+     * 查询所有商家
+     */
+    @GetMapping
+    public Result<List<Merchant>> getAllMerchants() {
+        List<Merchant> list = merchantService.getAllMerchant();
+        return Result.success(list);
+    }
+
+    /**
+     * 修改商家状态
+     */
+    @PutMapping("/status")
+    public Result ChangeStatus(@RequestBody Merchant merchant){
+        merchantService.changeStatus(merchant);
+        return Result.success();
+    }
+
 }

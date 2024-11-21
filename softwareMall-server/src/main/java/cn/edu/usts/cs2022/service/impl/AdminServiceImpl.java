@@ -21,23 +21,9 @@ public class AdminServiceImpl implements AdminService {
         return adminMapper.login(username, password);
     }
 
-    /**
-     * 获取全部用户
-     * @return
-     */
-    @Override
-    public List<User> getUserList() {
-        return adminMapper.selectAllUsers();
-    }
 
-    /**
-     * 修改用户状态
-     * @param user
-     */
-    @Override
-    public void changeUserStatus(User user) {
-        adminMapper.changeStatus(user);
-    }
+
+
 
     /**
      * 获取所有商家
@@ -48,43 +34,5 @@ public class AdminServiceImpl implements AdminService {
         return adminMapper.selectMerchant();
     }
 
-    /**
-     * 获取全部分类
-     * @return
-     */
-    @Override
-    public List<Category> getAllCategory() {
-        return adminMapper.selectCategory();
-    }
 
-    /**
-     * 新增分类
-     * @param category
-     */
-    @Override
-    public void insertCategory(Category category) {
-        adminMapper.insertCategory(category);
-    }
-
-    /**
-     * 删除分类
-     * @param id
-     */
-    @Override
-    public void deleteCategory(Integer id) {
-        //TODO
-        //添加删除限制
-       /* adminMapper.selectProductByCategoryId(id)
-        if()*/
-        adminMapper.deleteCategory(id);
-    }
-
-    /**
-     * 编辑分类
-     * @param category
-     */
-    @Override
-    public void updateCategory(Category category) {
-        adminMapper.updatecategory(category);
-    }
 }
