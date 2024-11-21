@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -17,6 +18,7 @@ import java.util.Map;
 public class ProductServiceImpl implements ProductService  {
 
     private final ProductMapper productMapper;
+
     @Override
     public void add(ProductDTO productDTO) {
         Product product = new Product();
@@ -30,5 +32,15 @@ public class ProductServiceImpl implements ProductService  {
         product.setCreateTime(LocalDateTime.now());
         product.setUpdateTime(LocalDateTime.now());
         productMapper.add(product);
+    }
+
+    @Override
+    public List<Product> getAllProduct() {
+        return productMapper.getAllProduct();
+    }
+
+    @Override
+    public List<Product> getAllByMerchantId(Integer merchantId) {
+        return productMapper.getAllByMerchantId(merchantId);
     }
 }

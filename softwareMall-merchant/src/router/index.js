@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import login from '../views/LoginIndex.vue'
+import login from '../views/login/LoginIndex.vue'
 
-import Product from '../views/ProductManage.vue'
-import Home from '../views/HomeIndex.vue'
-import Order from '../views/OrderIndex.vue'
-import Merchant from '../views/MerchantIndex.vue'
+import Product from '../views/product/ProductManage.vue'
+import Home from '../views/home/HomeIndex.vue'
+import Order from '../views/order/OrderIndex.vue'
+import Merchant from '../views/merchant/MerchantIndex.vue'
 
 
 const routes = [

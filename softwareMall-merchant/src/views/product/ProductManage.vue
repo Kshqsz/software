@@ -1,9 +1,18 @@
 <script setup>  
 import { ref, computed, onMounted } from 'vue';  
 import { categoryAddService, categoryGetAllService} from '@/api/category'
-import { productAddService } from '@/api/product'
+import { productAddService, productGetAllByMerchantIdService } from '@/api/product'
 import { ElMessage } from 'element-plus';
+import { Plus } from '@element-plus/icons-vue'
+import { useMerchantStore} from '@/stores'; 
 
+const merchantStore = useMerchantStore();
+
+const merchantId = merchantStore.merchant.id
+const getCategoryName = (categoryId) => {
+  const category = categories.value.find(item => item.id === categoryId)
+  return category ? category.name : "未知分类"
+}
 const addCategory = async (name) => {
   await categoryAddService({name});
   addCategoryDialogVisible.value = false;
@@ -14,13 +23,45 @@ const addCategory = async (name) => {
 const addProduct = async () => {
   await productAddService(newProduct.value)
   ElMessage.success("添加商品成功")
+  const res = await productGetAllByMerchantIdService(merchantId);
+  products.value = res.data.data;
+  newProduct.value = {  
+    name: '',  
+    price: 0, 
+    categoryId: '',
+    video: '', 
+    image: '',
+    source: '',
+    description: '',  
+  };  
   addProductDialogVisible.value = false
 }
-const products = ref([  
-  { name: 'Product 1', description: 'Description 1', price: 100, link: 'link1.com', image: 'image1.jpg', category: 'Category 1', status: 'published' },  
-  { name: 'Product 2', description: 'Description 2', price: 200, link: 'link2.com', image: 'image2.jpg', category: 'Category 2', status: 'pending' },  
-  { name: 'Product 3', description: 'Description 3', price: 300, link: 'link3.com', image: 'image3.jpg', category: 'Category 1', status: 'pending' }  
-]);  
+
+const updateImage = async (response) => {
+  editProduct.value.image = response.data;
+  ElMessage.success("上传图片成功~");
+}
+const updateSource = async (response) => {
+  editProduct.value.source = response.data;
+  ElMessage.success("上传文件成功~")
+}
+const updateVideo = async (response) => {
+  editProduct.value.video = response.data;
+  ElMessage.success("上传演示成功~");
+}
+const addImage = async (response) => {
+  newProduct.value.image = response.data;
+  ElMessage.success("上传图片成功~");
+}
+const addSource = async (response) => {
+  newProduct.value.source = response.data;
+  ElMessage.success("上传文件成功~")
+}
+const addViedo= async (response) => {
+  newProduct.value.video = response.data;
+  ElMessage.success("上传演示视频成功~")
+}
+const products = ref([]);  
 
 const sortType = ref('priceAsc');  
 const searchText = ref('');  
@@ -71,6 +112,8 @@ const categories = ref([])
 onMounted(async () => {
   const res = await categoryGetAllService();
   categories.value = res.data.data; // 将数据赋值给 ref
+  const productList = await productGetAllByMerchantIdService(merchantId);
+  products.value = productList.data.data;
 });
 
 function sortProducts() {  
@@ -171,7 +214,7 @@ function showAddCategoryDialog() {
         <span>软件分类:</span>  
         <el-select v-model="selectedCategory" @change="filterByCategory">  
           <el-option label="全部" value=""></el-option>  
-          <el-option v-for="category in categories" :key="category" :label="category" :value="category"></el-option>  
+          <el-option v-for="category in categories" :key="category.id" :label="category.name" :value="category.id"></el-option>  
         </el-select>  
         
       </div>  
@@ -188,11 +231,15 @@ function showAddCategoryDialog() {
       <el-table-column prop="name" label="软件名称" />  
       <el-table-column prop="description" label="软件描述" />  
       <el-table-column prop="price" label="软件价格" />  
-      <el-table-column prop="category" label="软件分类" />  
+      <el-table-column label="软件分类" > 
+        <template #default="scope">
+          <span>{{ getCategoryName(scope.row.categoryId) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="状态">  
         <template #default="scope">  
-          <el-tag v-if="scope.row.status === 'pending'">审核中</el-tag>  
-          <el-tag v-else-if="scope.row.status === 'published'" type="success">已上架</el-tag>  
+          <el-tag v-if="scope.row.status === 0">审核中</el-tag>  
+          <el-tag v-else-if="scope.row.status === 1" type="success">已上架</el-tag>  
           <el-tag v-else type="danger">已下架</el-tag>  
         </template>  
       </el-table-column>  
@@ -220,40 +267,38 @@ function showAddCategoryDialog() {
       <el-input-number v-model="newProduct.price" :min="0" />  
     </el-form-item>  
     <el-form-item label="上传商品图片">  
-      <el-upload  
-        class="upload-demo"  
-        drag  
-        action=""  
-        :on-change="handleImageChange"  
-        :show-file-list="false"  
-      >  
-        <i class="el-icon-upload"></i>  
-        <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>  
-      </el-upload>  
+      <el-upload
+        style="background-color: gainsboro"
+        class="avatar-uploader"
+        action="/api/upload"
+        :show-file-list="false"
+        :on-success="addImage"
+      >
+        <img v-if="newProduct.image" :src="newProduct.image" class="avatar" />
+        <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+      </el-upload>
     </el-form-item>  
-    <el-form-item label="上传商品链接">  
-      <el-upload  
-        class="upload-demo"  
-        drag  
-        action=""  
-        :on-change="handleLinkChange"  
-        :show-file-list="false"  
-      >  
-        <i class="el-icon-upload"></i>  
-        <div class="el-upload__text">将链接文件拖到此处，或<em>点击上传</em></div>  
-      </el-upload>  
+    <el-form-item label="上传商品文件">  
+      <el-upload
+          action="/api/upload"
+          :auto-upload="true"
+          :on-success="addSource"
+        >
+          <el-button size="middle" type="success"
+            >点击上传产品文件(压缩包)</el-button
+          >
+          </el-upload>
     </el-form-item>  
     <el-form-item label="上传商品视频">  
-      <el-upload  
-        class="upload-demo"  
-        drag  
-        action=""  
-        :on-change="handleVideoChange"  
-        :show-file-list="false"  
-      >  
-        <i class="el-icon-upload"></i>  
-        <div class="el-upload__text">将视频拖到此处，或<em>点击上传</em></div>  
-      </el-upload>  
+      <el-upload
+          action="/api/upload"
+          :auto-upload="true"
+          :on-success="addViedo"
+        >
+          <el-button size="middle" type="primary"
+            >点击上传产品演示视频</el-button
+          >
+          </el-upload>
     </el-form-item>  
     <el-form-item label="商品分类">  
       <el-select v-model="newProduct.categoryId" placeholder="选择分类">  
@@ -282,45 +327,48 @@ function showAddCategoryDialog() {
       <el-input-number v-model="editedProduct.price" :min="0" />  
     </el-form-item>  
     <el-form-item label="上传商品图片">  
-      <el-upload  
-        class="upload-demo"  
-        drag  
-        action=""  
-        :on-change="handleImageChange"  
-        :show-file-list="false"  
-      >  
-        <i class="el-icon-upload"></i>  
-        <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>  
-      </el-upload>  
+      <el-upload
+        style="background-color: gainsboro"
+        class="avatar-uploader"
+        action="/api/upload"
+        :show-file-list="false"
+        :on-success="updateImage"
+      >
+        <img v-if="editedProduct.image" :src="editedProduct.image" class="avatar" />
+        <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+      </el-upload>
     </el-form-item>  
-    <el-form-item label="上传商品链接">  
-      <el-upload  
-        class="upload-demo"  
-        drag  
-        action=""  
-        :on-change="handleLinkChange"  
-        :show-file-list="false"  
-      >  
-        <i class="el-icon-upload"></i>  
-        <div class="el-upload__text">将链接文件拖到此处，或<em>点击上传</em></div>  
-      </el-upload>  
+    <el-form-item label="上传商品文件">  
+      <el-upload
+          action="/api/upload"
+          :auto-upload="true"
+          :on-success="updateSource"
+        >
+          <el-button size="middle" type="success"
+            >点击上传产品文件(压缩包)</el-button
+          >
+          </el-upload>
     </el-form-item>  
     <el-form-item label="上传商品视频">  
-      <el-upload  
-        class="upload-demo"  
-        drag  
-        action=""  
-        :on-change="handleVideoChange"  
-        :show-file-list="false"  
-      >  
-        <i class="el-icon-upload"></i>  
-        <div class="el-upload__text">将视频拖到此处，或<em>点击上传</em></div>  
-      </el-upload>  
+      <el-upload
+          action="/api/upload"
+          :auto-upload="true"
+          :on-success="updateVideo"
+        >
+          <el-button size="middle" type="primary"
+            >点击上传产品演示视频</el-button
+          >
+          </el-upload>
     </el-form-item>  
     <el-form-item label="商品分类">  
-      <el-select v-model="editedProduct.category" placeholder="选择分类">  
-        <el-option v-for="category in categories" :key="category" :label="category" :value="category"></el-option>  
-      </el-select>  
+      <el-select v-model="editedProduct.categoryId" placeholder="选择分类">  
+        <el-option 
+          v-for="category in categories" 
+          :key="category.id" 
+          :label="category.name" 
+          :value="category.id"> <!-- 确保 value 类型与 editedProduct.categoryId 类型一致 -->
+        </el-option>  
+      </el-select>
       <el-button type="primary" @click="showAddCategoryDialog">添加分类</el-button>  
     </el-form-item>  
   </el-form>  
@@ -391,4 +439,29 @@ function showAddCategoryDialog() {
   justify-content: center;  
   margin-top: 20px;  
 }  
+
+
+.avatar-uploader .el-upload {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+.avatar-uploader .el-upload:hover {
+  border-color: var(--el-color-primary);
+}
+.avatar-uploader .avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  text-align: center;
+}
 </style> 

@@ -8,11 +8,9 @@ import cn.edu.usts.cs2022.service.ProductService;
 import cn.edu.usts.cs2022.utils.ThreadLocalUtil;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -24,9 +22,19 @@ public class ProductController {
 
     @PostMapping("/add")
     public Result add(@RequestBody ProductDTO productDTO) {
-        Map<String, Object> map = ThreadLocalUtil.get();
-        Integer merchantId = (Integer) map.get("merchantId");
         productService.add(productDTO);
         return Result.success();
+    }
+
+    @GetMapping("/all")
+    public Result<List<Product>> getAllProduct() {
+        List<Product> productList = productService.getAllProduct();
+        return Result.success(productList);
+    }
+
+    @GetMapping("/all/{merchantId}")
+    public Result<List<Product>> getAllByMerchantId(@PathVariable("merchantId") Integer merchantId) {
+        List<Product> productList = productService.getAllByMerchantId(merchantId);
+        return Result.success(productList);
     }
 }

@@ -104,7 +104,7 @@ const handleLogin = async () => {
   background-size: cover; 
   background-position: center;  
   background-repeat: no-repeat; 
-  background-image: url('../assets/img/bk1.png');
+  background-image: url('@/assets/img/bk1.png');
 }  
 .login-card {  
   width: 400px;  
