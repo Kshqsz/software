@@ -91,7 +91,7 @@ const filteredProducts = computed(() => {
     );  
   }  
   if (selectedCategory.value) {  
-    filtered = filtered.filter(product => product.category === selectedCategory.value);  
+    filtered = filtered.filter(product => product.categoryId === selectedCategory.value);  
   }  
   return filtered;  
 });  
