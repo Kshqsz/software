@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.edu.usts.cs2022.mapper.ProductMapper">
+
+    <insert id="add">
+        insert into product(name, price, merchant_id, category_id, video, image, source, status, create_time, update_time )
+        values (#{name}, #{price}, #{merchantId}, #{categoryId}, #{video}, #{image}, #{source}, #{status}, #{createTime}, #{updateTime})
+    </insert>
+</mapper>

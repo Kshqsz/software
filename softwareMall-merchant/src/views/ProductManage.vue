@@ -1,6 +1,21 @@
 <script setup>  
-import { ref, computed } from 'vue';  
+import { ref, computed, onMounted } from 'vue';  
+import { categoryAddService, categoryGetAllService} from '@/api/category'
+import { productAddService } from '@/api/product'
+import { ElMessage } from 'element-plus';
 
+const addCategory = async (name) => {
+  await categoryAddService({name});
+  addCategoryDialogVisible.value = false;
+  ElMessage.success("添加分类成功");
+  const res = await categoryGetAllService();
+  categories.value = res.data.data;
+}
+const addProduct = async () => {
+  await productAddService(newProduct.value)
+  ElMessage.success("添加商品成功")
+  addProductDialogVisible.value = false
+}
 const products = ref([  
   { name: 'Product 1', description: 'Description 1', price: 100, link: 'link1.com', image: 'image1.jpg', category: 'Category 1', status: 'published' },  
   { name: 'Product 2', description: 'Description 2', price: 200, link: 'link2.com', image: 'image2.jpg', category: 'Category 2', status: 'pending' },  
@@ -18,7 +33,7 @@ const addCategoryDialogVisible = ref(false);
 const newProduct = ref({  
   name: '',  
   price: 0, 
-  categoryId: 0,
+  categoryId: '',
   video: '', 
   image: '',
   source: '',
@@ -49,7 +64,14 @@ const paginatedProducts = computed(() => {
 // const categories = computed(() => {  
 //   return [...new Set(products.value.map(product => product.category))];  
 // });  
+
+
 const categories = ref([])
+
+onMounted(async () => {
+  const res = await categoryGetAllService();
+  categories.value = res.data.data; // 将数据赋值给 ref
+});
 
 function sortProducts() {  
   if (sortType.value === 'priceAsc') {  
@@ -75,19 +97,19 @@ function showAddProductDialog() {
   addProductDialogVisible.value = true;  
 }  
 
-function addProduct() {  
-  products.value.push({ ...newProduct.value });  
-  addProductDialogVisible.value = false;  
-  newProduct.value = {  
-    name: '',  
-    description: '',  
-    price: 0,  
-    link: '',  
-    image: '',  
-    category: '',  
-    status: 'pending'  
-  };  
-}  
+// function addProduct() {  
+//   products.value.push({ ...newProduct.value });  
+//   addProductDialogVisible.value = false;  
+//   newProduct.value = {  
+//     name: '',  
+//     description: '',  
+//     price: 0,  
+//     link: '',  
+//     image: '',  
+//     category: '',  
+//     status: 'pending'  
+//   };  
+// }  
 
 function editProduct(product) {  
   editedProduct.value = { ...product };  
@@ -109,21 +131,21 @@ function showAddCategoryDialog() {
   addCategoryDialogVisible.value = true;  
 }  
 
-function addCategory() {  
-  if (newCategory.value && !categories.value.includes(newCategory.value)) {  
-    products.value.push({  
-      name: newCategory.value,  
-      description: '',  
-      price: 0,  
-      link: '',  
-      image: '',  
-      category: newCategory.value,  
-      status: 'pending'  
-    });  
-    newCategory.value = '';  
-  }  
-  addCategoryDialogVisible.value = false;  
-}  
+// function addCategory() {  
+//   if (newCategory.value && !categories.value.includes(newCategory.value)) {  
+//     products.value.push({  
+//       name: newCategory.value,  
+//       description: '',  
+//       price: 0,  
+//       link: '',  
+//       image: '',  
+//       category: newCategory.value,  
+//       status: 'pending'  
+//     });  
+//     newCategory.value = '';  
+//   }  
+//   addCategoryDialogVisible.value = false;  
+// }  
 
 //
 
@@ -234,8 +256,8 @@ function addCategory() {
       </el-upload>  
     </el-form-item>  
     <el-form-item label="商品分类">  
-      <el-select v-model="newProduct.category" placeholder="选择分类">  
-        <el-option v-for="category in categories" :key="category" :label="category" :value="category"></el-option>  
+      <el-select v-model="newProduct.categoryId" placeholder="选择分类">  
+        <el-option v-for="category in categories" :key="category.id" :label="category.name" :value="category.id"></el-option>  
       </el-select>  
       <el-button type="primary" @click="showAddCategoryDialog">添加分类</el-button>  
     </el-form-item>  
@@ -317,7 +339,7 @@ function addCategory() {
       </el-form>  
       <span  class="dialog-footer">  
         <el-button @click="addCategoryDialogVisible = false">取 消</el-button>  
-        <el-button type="primary" @click="addCategory">确定</el-button>  
+        <el-button type="primary" @click="addCategory(newCategory)">确定</el-button>  
       </span>  
     </el-dialog>  
   </div>  
