@@ -1,13 +1,12 @@
 <script setup>  
 import { ref, computed, onMounted } from 'vue';  
 import { categoryAddService, categoryGetAllService} from '@/api/category'
-import { productAddService, productGetAllByMerchantIdService } from '@/api/product'
+import { productAddService, productGetAllByMerchantIdService, productUpdateService } from '@/api/product'
 import { ElMessage } from 'element-plus';
 import { Plus } from '@element-plus/icons-vue'
 import { useMerchantStore} from '@/stores'; 
 
 const merchantStore = useMerchantStore();
-
 const merchantId = merchantStore.merchant.id
 const getCategoryName = (categoryId) => {
   const category = categories.value.find(item => item.id === categoryId)
@@ -38,15 +37,15 @@ const addProduct = async () => {
 }
 
 const updateImage = async (response) => {
-  editProduct.value.image = response.data;
+  editedProduct.value.image = response.data;
   ElMessage.success("上传图片成功~");
 }
 const updateSource = async (response) => {
-  editProduct.value.source = response.data;
+  editedProduct.value.source = response.data;
   ElMessage.success("上传文件成功~")
 }
 const updateVideo = async (response) => {
-  editProduct.value.video = response.data;
+  editedProduct.value.video = response.data;
   ElMessage.success("上传演示成功~");
 }
 const addImage = async (response) => {
@@ -159,11 +158,18 @@ function editProduct(product) {
   editProductDialogVisible.value = true;  
 }  
 
-function updateProduct() {  
-  const index = products.value.findIndex(product => product.name === editedProduct.value.name);  
-  products.value[index] = { ...editedProduct.value };  
-  editProductDialogVisible.value = false;  
-}  
+const updateProduct = async () => {
+  await productUpdateService(editedProduct.value)
+  const productList = await productGetAllByMerchantIdService(merchantId);
+  products.value = productList.data.data;
+  editProductDialogVisible.value = false;
+  ElMessage.success("商品更新成功")
+}
+// function updateProduct() {  
+//   const index = products.value.findIndex(product => product.name === editedProduct.value.name);  
+//   products.value[index] = { ...editedProduct.value };  
+//   editProductDialogVisible.value = false;  
+// }  
 
 function deleteProduct(product) {  
   const index = products.value.indexOf(product);  
@@ -307,7 +313,7 @@ function showAddCategoryDialog() {
       <el-button type="primary" @click="showAddCategoryDialog">添加分类</el-button>  
     </el-form-item>  
   </el-form>  
-  <span  class="dialog-footer">  
+  <span class="dialog-footer">  
     <el-button @click="addProductDialogVisible = false">取 消</el-button>  
     <el-button type="primary" @click="addProduct">确定</el-button>  
   </span>  
@@ -373,9 +379,9 @@ function showAddCategoryDialog() {
     </el-form-item>  
   </el-form>  
   <span  class="dialog-footer">  
-    <el-button @click="editProductDialogVisible = false">取 消</el-button>  
-    <el-button type="primary" @click="updateProduct">确定</el-button>  
-  </span>  
+        <el-button @click="editProductDialogVisible = false">取 消</el-button>  
+        <el-button type="primary" @click="updateProduct">确定</el-button>  
+    </span>  
 </el-dialog> 
 
     <!-- 添加分类对话框 -->  

@@ -43,4 +43,20 @@ public class ProductServiceImpl implements ProductService  {
     public List<Product> getAllByMerchantId(Integer merchantId) {
         return productMapper.getAllByMerchantId(merchantId);
     }
+
+    @Override
+    public void update(Product product) {
+        productMapper.update(product);
+    }
+
+    @Override
+    public List<Product> search(String searchInfo) {
+        List<Product> productList = productMapper.search(searchInfo);
+        return productList;
+    }
+
+    @Override
+    public Product getById(Integer id) {
+        return productMapper.getById(id);
+    }
 }

@@ -1,7 +1,5 @@
 <script setup>
 import { ref } from 'vue'
-import car from '@/assets/xiaomi_car.jpg'
-import ultra from '@/assets/su7_ultra.jpg'
 import home1 from '@/assets/home1.png'
 import home2 from '@/assets/home2.png'
 

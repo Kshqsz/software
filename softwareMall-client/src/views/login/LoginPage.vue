@@ -23,6 +23,7 @@ const login = async () => {
   const res = await userLoginService(formModel.value)
   userStore.setToken(res.data.data.token)
   userStore.setUsername(res.data.data.user.username)
+  userStore.setUser(res.data.data.user)
   ElMessage.success("登录成功~")
   router.push('/home')
 }

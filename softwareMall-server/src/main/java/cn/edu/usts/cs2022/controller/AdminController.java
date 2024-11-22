@@ -36,10 +36,6 @@ public class AdminController {
         }
     }
 
-
-
-
-
     /**
      * 查询所有商家
      */

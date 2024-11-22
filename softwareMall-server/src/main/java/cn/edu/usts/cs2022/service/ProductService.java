@@ -11,4 +11,10 @@ public interface ProductService {
     List<Product> getAllProduct();
 
     List<Product> getAllByMerchantId(Integer merchantId);
+
+    void update(Product product);
+
+    List<Product> search(String searchInfo);
+
+    Product getById(Integer id);
 }

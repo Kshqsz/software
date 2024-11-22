@@ -37,4 +37,23 @@ public class ProductController {
         List<Product> productList = productService.getAllByMerchantId(merchantId);
         return Result.success(productList);
     }
+
+    @PutMapping
+    public Result update(@RequestBody Product product) {
+        productService.update(product);
+        return Result.success();
+    }
+
+    @GetMapping("/search")
+    public Result<List<Product>> search(String searchInfo) {
+        List<Product> productList = productService.search(searchInfo);
+        return Result.success(productList);
+    }
+
+    @GetMapping("/{id}")
+    public Result<Product> getById(@PathVariable("id") Integer id) {
+        System.out.println(id);
+        Product product = productService.getById(id);
+        return Result.success(product);
+    }
 }

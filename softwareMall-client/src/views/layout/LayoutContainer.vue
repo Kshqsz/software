@@ -25,13 +25,14 @@ const userStore = useUserStore()
 const username = userStore.username
 const search = (keyword = '') => {
   searchInfo.value = keyword || searchInfo.value;
-  router.push({ path: '/searchResult', query: { query: searchInfo.value } });
+  router.push({ path: '/searchResult', query: { query: searchInfo.value, t: Date.now() } });
 };
 
 const handleNavClick = (item) => {
   if (item.isSearch) {
     // 如果是搜索项，调用搜索方法
     search(item.name);
+    searchInfo.value = ''
   } else if (item.path) {
     // 如果是普通导航项，跳转到指定路径
     router.push(item.path);
@@ -45,6 +46,7 @@ const handleNavClick = (item) => {
 //     router.push(path);
 //   }
 // };
+const welcome = ref("欢迎你~")
 const logout = () => {
   userStore.removeToken();
   userStore.removeUsername();
@@ -55,6 +57,7 @@ const goToUserCenter = () => {
   router.push("/userCenter")
 } 
 const goToHome = () => {
+  searchInfo.value = ''
   router.push("/home")
 }
 const gridData = [
@@ -96,6 +99,9 @@ const gridData = [
       <div class="nav-items">
         <span v-for="(item, index) in navItems" :key="index" @click="handleNavClick(item)">{{ item.name }}</span>
         <span @click="dialogTableVisible = true;">关于我们</span>
+        <el-dropdown class="welcome" >
+          <span>{{ welcome }}</span>
+        </el-dropdown>
         <el-dropdown class="user-dropdown">
           <span>
             {{ username}}
@@ -151,26 +157,25 @@ const gridData = [
   justify-content: center;
   cursor: pointer;
 }
-
-.search-box {
-  margin-top: 15px;
-  margin-right: 120px;
-  width: 250px;
-  height: 45px;
-}
-
-/* 去除个人中心按钮的边框和轮廓 */
-.user-dropdown span {
-  cursor: pointer;
+.welcome span {
+  cursor: default;
   display: inline-flex;
   align-items: center;
   outline: none !important;
   border: none !important;
   box-shadow: none !important;
 }
-
-.user-dropdown span:focus,
-.user-dropdown span:active {
+.search-box {
+  margin-top: 15px;
+  margin-right: 120px;
+  width: 250px;
+  height: 45px;
+}
+/* 去除个人中心按钮的边框和轮廓 */
+.user-dropdown span {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
   outline: none !important;
   border: none !important;
   box-shadow: none !important;

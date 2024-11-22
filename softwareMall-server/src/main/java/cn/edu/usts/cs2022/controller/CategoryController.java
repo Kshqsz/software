@@ -2,6 +2,7 @@ package cn.edu.usts.cs2022.controller;
 
 import cn.edu.usts.cs2022.pojo.dto.CategoryDTO;
 import cn.edu.usts.cs2022.pojo.po.Category;
+import cn.edu.usts.cs2022.pojo.po.Product;
 import cn.edu.usts.cs2022.pojo.po.Result;
 import cn.edu.usts.cs2022.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class CategoryController {
         return Result.success(categoryList);
     }
 
+
     /**
      * 删除分类
      */
@@ -51,5 +53,7 @@ public class CategoryController {
         categoryService.updateCategory(category);
         return Result.success();
     }
+
+
 
 }

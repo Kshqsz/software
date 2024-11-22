@@ -2,6 +2,7 @@ package cn.edu.usts.cs2022.mapper;
 
 import cn.edu.usts.cs2022.pojo.po.Product;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -15,4 +16,11 @@ public interface ProductMapper {
 
     @Select("select * from product where merchant_id = #{merchantId}")
     List<Product> getAllByMerchantId(Integer merchantId);
+
+    void update(Product product);
+
+    List<Product> search(String searchInfo);
+
+    @Select("select * from product where id = #{id}")
+    Product getById(@Param("id") Integer id);
 }

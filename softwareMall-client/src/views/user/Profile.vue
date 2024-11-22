@@ -1,20 +1,93 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router';
-// 用户信息
-const userInfo = ref({
-  name: 'Ksh',
-  greeting: '晚上好~',
-  security: '较高',
-  phone: '185*****12',
-  email: '24******8@qq.com',
-  stats: [
-    { label: '我的订单', count: 0, path: '/orders' },
-    { label: '待收货的订单', count: 0, path: '' },
-    { label: '待评价商品数', count: 1, path: '' },
-    { label: '喜欢的商品', count: 1, path: '/favorites' }
-  ]
+import { useUserStore } from '@/stores';
+import { ElMessage } from 'element-plus';
+
+const userStore = useUserStore()
+const editDialogVisible = ref(false) // 控制修改个人信息对话框
+const changePasswordDialogVisible = ref(false) // 控制修改密码对话框
+const userInfo = userStore.user
+
+const updateAvatar = (response) => {
+  editedUserInfo.value.avatar = response.data;
+  ElMessage.success("上传头像成功~")
+}
+const editedUserInfo = ref({
+  avatar: userInfo.avatar,
+  username: userInfo.username,
+  phone: userInfo.phone
 })
+// 打开对话框方法
+const openEditDialog = () => {
+  editDialogVisible.value = true;
+};
+
+// 关闭对话框方法
+const closeEditDialog = () => {
+  editDialogVisible.value = false;
+};
+
+// 打开修改密码对话框
+const openChangePasswordDialog = () => {
+  changePasswordDialogVisible.value = true
+}
+
+const checkPasswordMatch = (rule, value, callback) => {
+  if (value !== changePasswordForm.value.newPassword) {
+    callback(new Error('确认密码与新密码不一致'))
+  } else {
+    callback()
+  }
+}
+// 关闭修改密码对话框
+const closeChangePasswordDialog = () => {
+  changePasswordDialogVisible.value = false
+}
+
+
+const changePasswordForm = ref({
+  oldPassword: '',
+  newPassword: '',
+  rePassword: ''
+})
+const changePasswordRules = {
+  oldPassword: [
+    { required: true, message: '请输入旧密码', trigger: 'blur' }
+  ],
+  newPassword: [
+    { required: true, message: '请输入新密码', trigger: 'blur' },
+  ],
+  rePassword: [
+    { required: true, message: '请确认新密码', trigger: 'blur' },
+    { validator: checkPasswordMatch, trigger: 'blur' }
+  ]
+}
+
+const handleChangePassword = () => {
+  // 这里可以调用修改密码的API接口
+  console.log('修改密码:', changePasswordForm.value)
+  ElMessage.success('密码修改成功~')
+  closeChangePasswordDialog()
+}
+const handleSubmitChangePassword = () => {
+  // 表单校验
+  const form = refs.changePasswordFormRef
+  form.validate((valid) => {
+    if (valid) {
+      handleChangePassword()
+    } else {
+      ElMessage.error('请填写正确的密码信息')
+    }
+  })
+}
+
+const stats = ref([
+  { label: '我的订单', count: 0, path: '/orders' },
+  { label: '待收货的订单', count: 0, path: '' },
+  { label: '待评价商品数', count: 1, path: '' },
+  { label: '喜欢的商品', count: 1, path: '/favorites' }
+])
 const router = useRouter()
 // 获取统计项颜色
 const getStatColor = (index) => {
@@ -40,17 +113,16 @@ const goToDetail = (stat) => {
     <div class="user-info-container">
       <!-- 用户信息 -->
       <div class="user-info">
-        <img class="avatar" src="https://via.placeholder.com/100" alt="用户头像" />
+        <img class="avatar " src="https://via.placeholder.com/100" alt="用户头像" />
         <div>
-          <h2>{{ userInfo.name }}</h2>
-          <p>{{ userInfo.greeting }}</p>
-          <a href="#" class="edit-link">修改个人信息 &gt;</a>
+          <h2>{{ userInfo.username }}</h2>
+          <p> 晚上好~ </p>
+          <a href="#" class="edit-link" @click.prevent="openEditDialog">修改个人信息 &gt;</a>
         </div>
       </div>
 
       <!-- 账号安全信息 -->
       <div class="account-security">
-        <p>账户安全：<span class="security-level">{{ userInfo.security }}</span></p>
         <p>绑定手机：{{ userInfo.phone }}</p>
       </div>
     </div>
@@ -60,7 +132,7 @@ const goToDetail = (stat) => {
     <!-- 数据统计 -->
     <div class="stats">
       <div
-        v-for="(stat, index) in userInfo.stats"
+        v-for="(stat, index) in stats"
         :key="index"
         class="stat-item"
         @click="goToDetail(stat)"
@@ -75,6 +147,73 @@ const goToDetail = (stat) => {
         </div>
       </div>
     </div>
+        <!-- 修改个人信息对话框 -->
+      <el-dialog
+      v-model="editDialogVisible"
+      title="修改个人信息"
+      width="500px"
+      @close="closeEditDialog"
+    >
+      <el-form label-width="80px">
+        <!-- 修改头像 -->
+        <el-form-item label="头像">
+          <el-upload
+            action="/api/upload"
+            :on-success="updateAvatar"
+            :show-file-list="false"
+          >
+            <!-- 如果有头像，显示头像 -->
+            <img v-if="editedUserInfo.avatar" :src="editedUserInfo.avatar" class="uploaded-avatar" />
+            
+            <!-- 如果没有头像，显示文字提示 -->
+            <div v-else class="avatar-placeholder">
+              点击上传头像
+            </div>
+          </el-upload>
+        </el-form-item>
+
+        <!-- 用户名（只读） -->
+        <el-form-item label="用户名">
+          <el-input v-model="editedUserInfo.username" placeholder="用户名" disabled></el-input>
+        </el-form-item>
+
+        <!-- 修改电话 -->
+        <el-form-item label="手机号">
+          <el-input v-model="editedUserInfo.phone" placeholder="请输入手机号"></el-input>
+        </el-form-item>
+      </el-form>
+
+      <template #footer>
+        <el-button type="text" @click="openChangePasswordDialog" style="margin-right: 200px; color: #409EFF;">修改密码</el-button>
+        <el-button @click="closeEditDialog">取消</el-button>
+        <el-button type="primary" @click="closeEditDialog">保存</el-button>
+      </template>
+    </el-dialog>
+
+   <!-- 修改密码对话框 -->
+    <el-dialog
+      v-model="changePasswordDialogVisible"
+      title="修改密码"
+      width="400px"
+      @close="closeChangePasswordDialog"
+    >
+      <el-form :model="changePasswordForm" :rules="changePasswordRules" ref="changePasswordFormRef" label-width="100px">
+        <el-form-item label="旧密码" prop="oldPassword">
+          <el-input type="password" v-model="changePasswordForm.oldPassword" placeholder="请输入旧密码"></el-input>
+        </el-form-item>
+        <el-form-item label="新密码" prop="newPassword">
+          <el-input type="password" v-model="changePasswordForm.newPassword" placeholder="请输入新密码"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" prop="rePassword">
+          <el-input type="password" v-model="changePasswordForm.rePassword" placeholder="请再次输入新密码"></el-input>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="closeChangePasswordDialog">取消</el-button>
+        <el-button type="primary" @click="handleSubmitChangePassword">确认</el-button>
+      </template>
+    </el-dialog>
+
   </el-card>
 </template>
 
@@ -185,5 +324,34 @@ const goToDetail = (stat) => {
   font-size: 14px;
   color: #409eff;
   text-decoration: none;
+}
+
+/* 设置头像为圆形 */
+.uploaded-avatar {
+  width: 100px;    /* 设置宽度 */
+  height: 100px;   /* 设置高度 */
+  border-radius: 50%;  /* 圆形 */
+  object-fit: cover;   /* 保持比例填充 */
+}
+
+/* 头像空缺时的占位符样式 */
+.avatar-placeholder {
+  width: 100px;    /* 设置宽度 */
+  height: 100px;   /* 设置高度 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;  /* 圆形 */
+  background-color: #f5f5f5;  /* 背景色 */
+  color: #606266;    /* 文字颜色 */
+  font-size: 14px;    /* 字体大小 */
+  cursor: pointer;   /* 鼠标为指针 */
+  border: 1px dashed #dcdfe6;  /* 边框 */
+  transition: background-color 0.3s; /* 背景颜色变化 */
+}
+
+/* 鼠标悬停时改变背景色 */
+.avatar-placeholder:hover {
+  background-color: #e6f7ff;
 }
 </style>
