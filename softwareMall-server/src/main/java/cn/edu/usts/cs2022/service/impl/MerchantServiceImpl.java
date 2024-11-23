@@ -3,6 +3,7 @@ package cn.edu.usts.cs2022.service.impl;
 import cn.edu.usts.cs2022.mapper.MerchantMapper;
 import cn.edu.usts.cs2022.mapper.ProductMapper;
 import cn.edu.usts.cs2022.pojo.po.Merchant;
+import cn.edu.usts.cs2022.pojo.vo.MerchantVO;
 import cn.edu.usts.cs2022.service.MerchantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -52,5 +53,10 @@ public class MerchantServiceImpl implements MerchantService {
     @Override
     public void changeStatus(Merchant merchant) {
         merchantMapper.changeStatus(merchant);
+    }
+
+    @Override
+    public MerchantVO getByProductId(Integer id) {
+        return merchantMapper.getByProductId(id);
     }
 }

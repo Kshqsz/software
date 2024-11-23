@@ -1,6 +1,7 @@
 package cn.edu.usts.cs2022.service;
 
 import cn.edu.usts.cs2022.pojo.po.Merchant;
+import cn.edu.usts.cs2022.pojo.vo.MerchantVO;
 
 import java.util.List;
 
@@ -22,4 +23,6 @@ public interface MerchantService {
      * @param merchant
      */
     void changeStatus(Merchant merchant);
+
+    MerchantVO getByProductId(Integer id);
 }

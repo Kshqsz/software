@@ -1,9 +1,8 @@
 package cn.edu.usts.cs2022.controller;
 
-import cn.edu.usts.cs2022.pojo.dto.RegisterDTO;
-import cn.edu.usts.cs2022.pojo.dto.UserDTO;
+import cn.edu.usts.cs2022.pojo.dto.*;
+import cn.edu.usts.cs2022.pojo.po.Favourite;
 import cn.edu.usts.cs2022.pojo.po.Result;
-import cn.edu.usts.cs2022.pojo.dto.LoginDTO;
 import cn.edu.usts.cs2022.pojo.po.User;
 import cn.edu.usts.cs2022.service.UserService;
 import cn.edu.usts.cs2022.utils.JwtUtil;
@@ -91,7 +90,38 @@ public class UserController {
         return Result.success("修改成功");
     }
 
+    @GetMapping("/myFavourite/{id}")
+    public Result<List<Favourite>> getMyFavourite(@PathVariable("id") Integer userId) {
+        List<Favourite> favourites = userService.getMyFavourite(userId);
+        return Result.success(favourites);
+    }
 
+    @GetMapping("/countFavourite/{id}")
+    public Result<Integer> countFavourite(@PathVariable("id") Integer userId) {
+        Integer count = userService.countFavourite(userId);
+        return Result.success(count);
+    }
 
+    @PostMapping("/updatePassword")
+    public Result updatePassword(@RequestBody UpdatePasswordDTO updatePasswordDTO) {
+        String newPassword = updatePasswordDTO.getPassword();
+        String reNewPassword = updatePasswordDTO.getRePassword();
+        if (!newPassword.equals(reNewPassword)) {
+            return Result.error("两次密码不一致!");
+        }
+        userService.updatePassword(newPassword);
+        return Result.success();
+    }
 
+    @PutMapping("/update")
+    public Result update(@RequestBody UserUpdateDTO userUpdateDTO) {
+        userService.update(userUpdateDTO);
+        return Result.success();
+    }
+
+    @GetMapping("/{id}")
+    public Result<User> getById(@PathVariable("id") Integer id) {
+        User user = userService.getById(id);
+        return Result.success(user);
+    }
 }

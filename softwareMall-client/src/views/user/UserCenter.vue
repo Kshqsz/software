@@ -17,15 +17,7 @@ const menuItems = ref([
       { label: '我的个人中心', route: '/profile' },
       { label: '喜欢的商品', route: '/favorites' },
     ]
-  },
-  {
-    category: '售后服务',
-    items: [
-      { label: '服务记录', route: '/services' },
-      { label: '申请服务', route: '/apply' },
-      { label: '领取快递报销', route: '/reimburse' },
-    ]
-  },
+  }
 ])
 const route = useRoute()
 const router = useRouter()

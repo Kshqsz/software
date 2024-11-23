@@ -1,5 +1,7 @@
 package cn.edu.usts.cs2022.service;
 
+import cn.edu.usts.cs2022.pojo.dto.UserUpdateDTO;
+import cn.edu.usts.cs2022.pojo.po.Favourite;
 import cn.edu.usts.cs2022.pojo.po.User;
 
 import java.util.List;
@@ -23,4 +25,14 @@ public interface UserService {
      * @param user
      */
     void changeUserStatus(User user);
+
+    List<Favourite> getMyFavourite(Integer userId);
+
+    Integer countFavourite(Integer userId);
+
+    void updatePassword(String newPassword);
+
+    void update(UserUpdateDTO userUpdateDTO);
+
+    User getById(Integer id);
 }

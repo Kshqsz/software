@@ -1,5 +1,7 @@
 package cn.edu.usts.cs2022.mapper;
 
+import cn.edu.usts.cs2022.pojo.dto.UserUpdateDTO;
+import cn.edu.usts.cs2022.pojo.po.Favourite;
 import cn.edu.usts.cs2022.pojo.po.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -33,4 +35,19 @@ public interface UserMapper {
      */
     @Update("UPDATE user set status = #{status} where id = #{id}")
     void changeStatus(User user);
+
+    @Select("select * from favourite where user_id = #{userId}")
+    List<Favourite> getMyFavourite(Integer userId);
+
+    @Select("select count(*) from favourite where user_id = #{userId}")
+    Integer countFavourite(Integer userId);
+
+    @Update("update user set password = #{newPassword} where id = #{userId}")
+    void updatePassword(@Param("userId") Integer userId,
+                        @Param("newPassword") String newPassword);
+
+    void update(UserUpdateDTO userUpdateDTO);
+
+    @Select("select * from user where id = #{id}")
+    User getById(Integer id);
 }

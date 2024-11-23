@@ -5,13 +5,11 @@ import cn.edu.usts.cs2022.pojo.dto.ProductDTO;
 import cn.edu.usts.cs2022.pojo.po.Product;
 import cn.edu.usts.cs2022.pojo.po.Result;
 import cn.edu.usts.cs2022.service.ProductService;
-import cn.edu.usts.cs2022.utils.ThreadLocalUtil;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/product")
@@ -52,8 +50,17 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public Result<Product> getById(@PathVariable("id") Integer id) {
-        System.out.println(id);
         Product product = productService.getById(id);
         return Result.success(product);
     }
+
+    @PostMapping("/getByIds")
+    public Result<List<Product>> getByIds(@RequestBody List<Integer> ids) {
+        if (ids.size() == 0) {
+            return Result.success(List.of());
+        }
+        List<Product> products = productService.getByIds(ids);
+        return Result.success(products);
+    }
+
 }

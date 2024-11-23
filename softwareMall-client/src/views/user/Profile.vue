@@ -1,22 +1,25 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores';
-import { ElMessage } from 'element-plus';
+import { userCountFavouriteService, userUpdatePasswordService, userUpdateService,
+         userGetByIdService} from '@/api/user'
+import { Tickets, Edit, Checked} from '@element-plus/icons-vue'
 
 const userStore = useUserStore()
 const editDialogVisible = ref(false) // 控制修改个人信息对话框
 const changePasswordDialogVisible = ref(false) // 控制修改密码对话框
-const userInfo = userStore.user
-
+const userInfo = ref(userStore.user)
+const changePasswordFormRef = ref(null)
 const updateAvatar = (response) => {
   editedUserInfo.value.avatar = response.data;
   ElMessage.success("上传头像成功~")
 }
 const editedUserInfo = ref({
-  avatar: userInfo.avatar,
-  username: userInfo.username,
-  phone: userInfo.phone
+  id: userInfo.value.id,
+  avatar: userInfo.value.avatar,
+  username: userInfo.value.username,
+  phone: userInfo.value.phone
 })
 // 打开对话框方法
 const openEditDialog = () => {
@@ -24,9 +27,21 @@ const openEditDialog = () => {
 };
 
 // 关闭对话框方法
-const closeEditDialog = () => {
+const closeEditDialog = async () => {
   editDialogVisible.value = false;
 };
+
+const getUser = async () => {
+  const res = await userGetByIdService(userInfo.value.id);
+  userStore.setUser(res.data.data);
+  userInfo.value = userStore.user;
+}
+const save = async () => {
+  await userUpdateService(editedUserInfo.value);
+  await getUser();
+  ElMessage.success("修改个人信息成功~");
+  editDialogVisible.value = false;
+}
 
 // 打开修改密码对话框
 const openChangePasswordDialog = () => {
@@ -42,6 +57,11 @@ const checkPasswordMatch = (rule, value, callback) => {
 }
 // 关闭修改密码对话框
 const closeChangePasswordDialog = () => {
+  changePasswordForm.value = {
+    oldPassword: '',
+    newPassword: '',
+    rePassword: ''
+  }
   changePasswordDialogVisible.value = false
 }
 
@@ -64,15 +84,31 @@ const changePasswordRules = {
   ]
 }
 
-const handleChangePassword = () => {
+const handleChangePassword = async () => {
   // 这里可以调用修改密码的API接口
-  console.log('修改密码:', changePasswordForm.value)
+  const passwordDTO = {
+    password: changePasswordForm.value.newPassword,
+    rePassword: changePasswordForm.value.rePassword
+  };
+  await userUpdatePasswordService(passwordDTO);
+  await getUser();
   ElMessage.success('密码修改成功~')
+  changePasswordForm.value = {
+    oldPassword: '',
+    newPassword: '',
+    rePassword: ''
+  }
   closeChangePasswordDialog()
 }
+
 const handleSubmitChangePassword = () => {
+    // 校验旧密码是否正确
+  if (changePasswordForm.value.oldPassword !== userInfo.value.password) {
+    ElMessage.error('旧密码不正确');
+    return; // 如果旧密码不正确，直接返回
+  }
   // 表单校验
-  const form = refs.changePasswordFormRef
+  const form = changePasswordFormRef.value
   form.validate((valid) => {
     if (valid) {
       handleChangePassword()
@@ -84,23 +120,24 @@ const handleSubmitChangePassword = () => {
 
 const stats = ref([
   { label: '我的订单', count: 0, path: '/orders' },
-  { label: '待收货的订单', count: 0, path: '' },
-  { label: '待评价商品数', count: 1, path: '' },
-  { label: '喜欢的商品', count: 1, path: '/favorites' }
+  { label: '待支付的订单', count: 0, path: '' }, 
+  { label: '喜欢的商品', count: 1, path: '/favorites' },
+  { label: '已完成的订单', count: 0, path: '' }, 
 ])
+onMounted( async () => {
+  await countFavourite();
+})
+const countFavourite = async () => {
+  const userId = userInfo.value.id;
+  const res = await userCountFavouriteService(userId);
+  stats.value[2].count = res.data.data;
+}
 const router = useRouter()
 // 获取统计项颜色
 const getStatColor = (index) => {
-  const colors = ['#FF7F00', '#67C23A', '#409EFF', '#F7BA2A']
+  const colors = ['#FF7F00', '#409EFF', '#FF0000', '#67C23A']
   return colors[index % colors.length]
 }
-
-// 获取统计项图标
-const getStatIcon = (index) => {
-  const icons = ['el-icon-wallet', 'el-icon-truck', 'el-icon-message', 'el-icon-star-on']
-  return icons[index % icons.length]
-}
-
 const goToDetail = (stat) => {
   router.push(stat.path)
 }
@@ -113,7 +150,7 @@ const goToDetail = (stat) => {
     <div class="user-info-container">
       <!-- 用户信息 -->
       <div class="user-info">
-        <img class="avatar " src="https://via.placeholder.com/100" alt="用户头像" />
+        <img class="avatar " :src="userInfo.avatar ? userInfo.avatar: 'https://via.placeholder.com/100' " alt="用户头像" />
         <div>
           <h2>{{ userInfo.username }}</h2>
           <p> 晚上好~ </p>
@@ -138,7 +175,12 @@ const goToDetail = (stat) => {
         @click="goToDetail(stat)"
       >
         <el-card class="stat-icon" shadow = "never":style="{ backgroundColor: stat.color || getStatColor(index) }" >
-          <i :class="getStatIcon(index)"></i>
+          <el-icon> 
+            <Tickets v-if="index==0"></Tickets>
+            <Edit v-if="index==1"></Edit>
+            <Checked v-if="index==3"></Checked>
+          </el-icon> 
+          <i :class="'far fa-heart'" v-if="index===2" style="padding-bottom: 30px;"></i>
         </el-card>
         <div class="stat-info">
           <h3>{{ stat.label }}</h3>
@@ -171,7 +213,6 @@ const goToDetail = (stat) => {
             </div>
           </el-upload>
         </el-form-item>
-
         <!-- 用户名（只读） -->
         <el-form-item label="用户名">
           <el-input v-model="editedUserInfo.username" placeholder="用户名" disabled></el-input>
@@ -186,7 +227,7 @@ const goToDetail = (stat) => {
       <template #footer>
         <el-button type="text" @click="openChangePasswordDialog" style="margin-right: 200px; color: #409EFF;">修改密码</el-button>
         <el-button @click="closeEditDialog">取消</el-button>
-        <el-button type="primary" @click="closeEditDialog">保存</el-button>
+        <el-button type="primary" @click="save">保存</el-button>
       </template>
     </el-dialog>
 
@@ -213,7 +254,6 @@ const goToDetail = (stat) => {
         <el-button type="primary" @click="handleSubmitChangePassword">确认</el-button>
       </template>
     </el-dialog>
-
   </el-card>
 </template>
 
@@ -325,7 +365,6 @@ const goToDetail = (stat) => {
   color: #409eff;
   text-decoration: none;
 }
-
 /* 设置头像为圆形 */
 .uploaded-avatar {
   width: 100px;    /* 设置宽度 */
@@ -354,4 +393,9 @@ const goToDetail = (stat) => {
 .avatar-placeholder:hover {
   background-color: #e6f7ff;
 }
+.stat-item i.far.fa-heart {
+  border: none;
+  box-shadow: none;
+}
+
 </style>

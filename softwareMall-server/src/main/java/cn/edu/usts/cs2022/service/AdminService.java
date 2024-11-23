@@ -11,11 +11,6 @@ public interface AdminService {
     Admin login(String username, String password);
 
 
-
-
-
-
-
     /**
      * 获取所有商家
      * @return

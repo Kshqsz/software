@@ -3,20 +3,31 @@ import { useRoute } from 'vue-router';  // 导入 useRoute
 import { productGetByIdService } from '@/api/product';
 import { onMounted, ref } from 'vue';
 import { categoryGetAllService } from '@/api/category'
+import { useUserStore } from '@/stores';
+import { userGetFavouriteService } from '@/api/user'
+import { favouriteAddService, favouriteDeleteService} from '@/api/favourite'
+import { merchantGeyByProductIdService } from '@/api/merchant.js'
 
 // 使用 useRoute 获取当前路由信息
 const route = useRoute();
+const userStore = useUserStore();
+const userId = userStore.user.id;
+
 const categories = ref([]);
 // 定义响应式变量
 const product = ref({});
 const productId = route.params.id;
 const merchantInfo = ref({
+  id: '',
   username: '商家名称',  // 假设商家的用户名
   avatar: 'https://via.placeholder.com/100'  // 假设商家的头像
 });
 
-// 保存已喜欢商品的 ID 集合
-const likedProducts = ref(new Set());
+const getMerchant = async () => {
+  const res = await merchantGeyByProductIdService(productId);
+  merchantInfo.value = res.data.data;
+}
+const likedProducts = ref([]);
 
 // 获取商品分类名称
 const getCategoryName = (id) => {
@@ -24,20 +35,43 @@ const getCategoryName = (id) => {
   return category ? category.name : "未知分类";
 };
 
+const getFavourites = async () => {
+  const favourite_res = await userGetFavouriteService(userId);
+  likedProducts.value = favourite_res.data.data.map(item => item.productId);
+}
 // 获取商品信息和分类
 onMounted(async () => {
   const res = await productGetByIdService(productId);
   product.value = res.data.data;
+
   const category_res = await categoryGetAllService();
   categories.value = category_res.data.data;
+
+  getFavourites();
+  getMerchant();
 });
 
+const has = () => {
+  for (var i = 0; i < likedProducts.value.length; i++) {
+    if (likedProducts.value[i] == productId) {
+      return true;
+    }
+  }
+  return false;
+}
+
 // 切换商品的喜欢状态
-const toggleLike = (productId) => {
-  if (likedProducts.value.has(productId)) {
-    likedProducts.value.delete(productId);
+const toggleLike = async (productId) => {
+  if (has()) {
+    // 如果已存在，则删除该商品ID
+    await favouriteDeleteService(productId);
+    await getFavourites();
+    ElMessage.success("取消收藏成功~")
   } else {
-    likedProducts.value.add(productId);
+    // 如果不存在，则添加该商品ID
+    await favouriteAddService(productId);
+    await getFavourites();
+    ElMessage.success("收藏成功~")
   }
 };
 </script>
@@ -62,11 +96,11 @@ const toggleLike = (productId) => {
 
           <!-- 喜欢按钮，修改样式使其与立即购买按钮一致 -->
           <button 
-            :class="{'like-button': true, 'liked': likedProducts.has(productId)}"
+            :class="{'like-button': true, 'liked': has(productId)}"
             @click.stop="toggleLike(productId)"
           >
             <i
-              :class="likedProducts.has(productId) ? 'fas fa-heart' : 'far fa-heart'"
+              :class="has(productId) ? 'fas fa-heart' : 'far fa-heart'"
               class="like-icon"
             ></i>
             喜欢
@@ -78,7 +112,7 @@ const toggleLike = (productId) => {
     <hr style="margin-top: 50px;">
     <div class="merchant-info">
       <h3>商家:</h3>
-      <img :src="merchantInfo.avatar" alt="Merchant Avatar" class="merchant-avatar" />
+      <img :src="merchantInfo.avatar ? merchantInfo.avatar: 'https://via.placeholder.com/100'" alt="Merchant Avatar" class="merchant-avatar" />
       <p class="merchant-username">{{ merchantInfo.username }}</p>
     </div>
 

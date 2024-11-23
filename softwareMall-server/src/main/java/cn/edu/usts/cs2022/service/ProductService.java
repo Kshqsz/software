@@ -2,6 +2,7 @@ package cn.edu.usts.cs2022.service;
 
 import cn.edu.usts.cs2022.pojo.dto.ProductDTO;
 import cn.edu.usts.cs2022.pojo.po.Product;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,4 +18,7 @@ public interface ProductService {
     List<Product> search(String searchInfo);
 
     Product getById(Integer id);
+
+    List<Product> getByIds(@Param("ids") List<Integer> ids);
+
 }

@@ -23,6 +23,7 @@ const navItems = ref([
 const router = useRouter()
 const userStore = useUserStore()
 const username = userStore.username
+const user = ref(userStore.user)
 const search = (keyword = '') => {
   searchInfo.value = keyword || searchInfo.value;
   router.push({ path: '/searchResult', query: { query: searchInfo.value, t: Date.now() } });
@@ -38,14 +39,6 @@ const handleNavClick = (item) => {
     router.push(item.path);
   }
 };
-// const navigateTo = (path) => {
-//   if (path == '/about') {
-//     dialogTableVisible.value = true;
-
-//   } else {
-//     router.push(path);
-//   }
-// };
 const welcome = ref("欢迎你~")
 const logout = () => {
   userStore.removeToken();
@@ -61,10 +54,10 @@ const goToHome = () => {
   router.push("/home")
 }
 const gridData = [
-  { name: '韩守坤', from: '苏州科技大学'},
-  { name: '郁竹一', from: '苏州科技大学'},
-  { name: '吴纡怀', from: '苏州科技大学'},
-  { name: '陈松',   from: '苏州科技大学'},
+  { name: '韩守坤', from: '苏州科技大学', email: '2456480538@qq.com'},
+  { name: '郁竹一', from: '苏州科技大学', email: '2949621931@qq.com'},
+  { name: '吴纡怀', from: '苏州科技大学', email: '1085406285@qq.com'},
+  { name: '陈松',   from: '苏州科技大学', email: '2220834872@qq.com'},
 ]
 </script>
 
@@ -73,6 +66,7 @@ const gridData = [
     <el-table :data="gridData">
       <el-table-column property="name" label="Name" width="200" />
       <el-table-column property="from" label="From" />
+      <el-table-column property="email" label="Contact us"></el-table-column>
     </el-table>
 
     <!-- 指导老师信息 -->
@@ -99,13 +93,19 @@ const gridData = [
       <div class="nav-items">
         <span v-for="(item, index) in navItems" :key="index" @click="handleNavClick(item)">{{ item.name }}</span>
         <span @click="dialogTableVisible = true;">关于我们</span>
+      </div>
+      <div  class="dropdown-container">
         <el-dropdown class="welcome" >
-          <span>{{ welcome }}</span>
+          <span> {{ welcome }}</span>
+        </el-dropdown>
+        <el-dropdown class="welcome">
+          <span> {{ username }}</span>
         </el-dropdown>
         <el-dropdown class="user-dropdown">
           <span>
-            {{ username}}
-            <el-icon>
+            <el-avatar :src="userStore.user.avatar" :size="55">
+            </el-avatar>
+           <el-icon>
               <arrow-down />
             </el-icon>
           </span>
@@ -135,9 +135,7 @@ const gridData = [
 
 <style scoped>
 .top-nav {
-  display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 0 20px;
   background-color: #ffffff;
   margin-bottom: 10px;
@@ -150,6 +148,7 @@ const gridData = [
 }
 
 .nav-items {
+  padding-left: 100px;
   padding-top: 15px;
   display: flex;
   gap: 15px;
@@ -158,12 +157,14 @@ const gridData = [
   cursor: pointer;
 }
 .welcome span {
+  padding-top: 15px;
   cursor: default;
   display: inline-flex;
   align-items: center;
   outline: none !important;
   border: none !important;
   box-shadow: none !important;
+  margin-right: 10px; 
 }
 .search-box {
   margin-top: 15px;
@@ -173,12 +174,31 @@ const gridData = [
 }
 /* 去除个人中心按钮的边框和轮廓 */
 .user-dropdown span {
+  margin-top: 10px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   outline: none !important;
   border: none !important;
   box-shadow: none !important;
+  margin-right: 10px;
+}
+.el-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.dropdown-container {
+  display: flex; /* 将三个下拉框包裹在一个 flex 容器内 */
+  align-items: center;
+  gap: 5px; /* 控制间距 */
+  margin-left: 0;
+}
+
+.avatar-icon {
+  margin-right: 5px; /* 调整头像和文字间距 */
 }
 .mentor-info {
   margin-right: 100px;

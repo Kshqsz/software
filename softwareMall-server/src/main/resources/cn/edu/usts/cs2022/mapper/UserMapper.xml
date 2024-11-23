@@ -9,4 +9,15 @@
         insert into user(username, password, avatar, phone, status, create_time, update_time )
         values (#{username}, #{password}, #{avatar}, #{phone}, #{status}, #{createTime}, #{updateTime})
     </insert>
+    <update id="update">
+        update user
+        <set>
+            <if test="avatar != null"> avatar = #{avatar},</if>
+            <if test="phone != null"> phone = #{phone}, </if>
+            <if test="true"> update_time = now()</if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
 </mapper>

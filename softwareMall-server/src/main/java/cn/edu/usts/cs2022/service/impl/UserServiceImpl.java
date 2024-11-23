@@ -1,13 +1,17 @@
 package cn.edu.usts.cs2022.service.impl;
 
 import cn.edu.usts.cs2022.mapper.UserMapper;
+import cn.edu.usts.cs2022.pojo.dto.UserUpdateDTO;
+import cn.edu.usts.cs2022.pojo.po.Favourite;
 import cn.edu.usts.cs2022.pojo.po.User;
 import cn.edu.usts.cs2022.service.UserService;
+import cn.edu.usts.cs2022.utils.ThreadLocalUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -60,5 +64,32 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changeUserStatus(User user) {
         userMapper.changeStatus(user);
+    }
+
+    @Override
+    public List<Favourite> getMyFavourite(Integer userId) {
+        return userMapper.getMyFavourite(userId);
+    }
+
+    @Override
+    public Integer countFavourite(Integer userId) {
+        return userMapper.countFavourite(userId);
+    }
+
+    @Override
+    public void updatePassword(String newPassword) {
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Integer userId = (Integer) map.get("userId");
+        userMapper.updatePassword(userId, newPassword);
+    }
+
+    @Override
+    public void update(UserUpdateDTO userUpdateDTO) {
+        userMapper.update(userUpdateDTO);
+    }
+
+    @Override
+    public User getById(Integer id) {
+        return userMapper.getById(id);
     }
 }

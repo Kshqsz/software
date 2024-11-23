@@ -8,3 +8,11 @@ export const productSearchService = (searchInfo) => {
 export const productGetByIdService = (id) => {
     return request.get(`/product/${id}`)
 }
+
+export const productGetAllService = () => {
+    return request.get('/product/all')
+}
+
+export const productGetByIdsService = (ids) => {
+    return request.post('/product/getByIds', ids);
+}

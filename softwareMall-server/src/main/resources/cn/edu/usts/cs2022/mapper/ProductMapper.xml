@@ -32,4 +32,10 @@
         where product.name like concat('%', #{searchInfo}, '%')
             or category.name like concat('%', #{searchInfo}, '%')
     </select>
+    <select id="getByIds" resultType="cn.edu.usts.cs2022.pojo.po.Product">
+        select * from product where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 </mapper>

@@ -9,4 +9,11 @@
         insert into merchant(username, password, avatar, phone, status, create_time, update_time )
         values (#{username}, #{password}, #{avatar}, #{phone}, #{status}, #{createTime}, #{updateTime})
     </insert>
+
+    <select id="getByProductId" resultType="cn.edu.usts.cs2022.pojo.vo.MerchantVO">
+        select merchant.id, merchant.username, merchant.avatar
+        from merchant
+                 join product on merchant.id = product.merchant_id
+        where product.id = #{id}
+    </select>
 </mapper>

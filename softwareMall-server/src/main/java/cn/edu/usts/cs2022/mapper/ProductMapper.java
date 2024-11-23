@@ -23,4 +23,6 @@ public interface ProductMapper {
 
     @Select("select * from product where id = #{id}")
     Product getById(@Param("id") Integer id);
+
+    List<Product> getByIds(@Param("ids") List<Integer> ids);
 }
