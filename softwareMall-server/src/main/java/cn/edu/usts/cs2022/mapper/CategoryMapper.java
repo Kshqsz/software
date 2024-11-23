@@ -38,4 +38,7 @@ public interface CategoryMapper {
      */
     @Update("update category set name = #{name} where id = #{id}")
     void updatecategory(Category category);
+
+    @Select("select name from category where id = #{id}")
+    String selectById(Integer id);
 }

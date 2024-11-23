@@ -19,3 +19,8 @@ export const adminUpdateCategory = ({id,name}) =>{
 export const admindeleteCategory = (id) => {
   return request.delete(`/category/${id}`); // 注意这里的模板字符串
 }
+
+//根据id查询分类
+export const getCategoryById = (id) =>{
+  return request.get(`/category/${id}`)
+}

@@ -30,4 +30,7 @@ public interface CategoryService {
      * @param category
      */
     void updateCategory(Category category);
+
+
+    String getCategoryById(Integer id);
 }

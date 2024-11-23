@@ -54,6 +54,16 @@ public class CategoryController {
         return Result.success();
     }
 
+    /**
+     * 根据id查询分类
+     */
+
+    @GetMapping("/{id}")
+    public Result getCategoryById(@PathVariable Integer id) {
+        String name = categoryService.getCategoryById(id);
+        return Result.success(name);
+    }
+
 
 
 }
