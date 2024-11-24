@@ -5,10 +5,7 @@ export const adminLoginService = ({ username, password }) => {
     return request.post("/admin/login", { username, password });
 }
 
-//查询需要审核的软件
 
-
-//处理审核，同意或拒绝
 
 
 //查询商家拥有商品

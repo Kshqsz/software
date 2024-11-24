@@ -64,4 +64,9 @@ public class ProductServiceImpl implements ProductService  {
     public List<Product> getByIds(List<Integer> ids) {
         return productMapper.getByIds(ids);
     }
+
+    @Override
+    public void updateStatus(Product product) {
+        productMapper.updateStatus(product);
+    }
 }

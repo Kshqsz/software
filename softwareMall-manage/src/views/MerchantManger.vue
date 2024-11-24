@@ -36,13 +36,13 @@
         <h3>{{ selectedMerchant }}的上架商品</h3>  
         <div>  
           <el-form :inline="true" class="demo-form-inline">  
-            <el-form-item label="排序方式">  
+            <!-- <el-form-item label="排序方式">  
               <el-select v-model="sortBy" placeholder="请选择">  
                 <el-option label="价格升序" value="priceAsc" />  
                 <el-option label="价格降序" value="priceDesc" />  
               </el-select>  
-            </el-form-item>  
-            <el-form-item label="商品分类">  
+            </el-form-item>   -->
+            <!-- <el-form-item label="商品分类">  
               <el-select v-model="selectedCategory" placeholder="请选择">  
                 <el-option label="全部" value="" />  
                 <el-option  
@@ -52,7 +52,7 @@
                   :value="category.name"  
                 />  
               </el-select>  
-            </el-form-item>  
+            </el-form-item>  --> 
           </el-form>  
         </div>  
         <el-table :data="product_M.value" style="width: 100%">  
@@ -66,8 +66,8 @@
           <el-table-column prop="price" label="价格" />  
           <el-table-column prop="source" label="商品链接">  
             <template #default="scope">  
-              <a :href="scope.row.link" target="_blank">{{ scope.row.link }}</a>  
-            </template>  
+              <a :href="scope.row.link" target="_blank">{{ scope.row.source }}</a>  
+            </template>   
           </el-table-column>  
           <el-table-column prop="categoryName" label="商品分类" />  
         </el-table>  
@@ -111,7 +111,7 @@ const toggleStatus = (row) => {
 
 const showModal = ref(false);  
 const selectedMerchant = ref(null);  
-const sortBy = ref('');  
+
  
 
 
@@ -126,7 +126,7 @@ const showProductModal = (merchant) => {
   console.log(merchantId)
   selectedMerchant.value = merchant.username; 
   console.log(paginatedProducts.value) 
-  product_M.value = paginatedProducts.value.filter(product => product.merchantId == 1);
+  product_M.value = paginatedProducts.value.filter(product => product.merchantId == merchantId);
   console.log(product_M.value)
 
   showModal.value = true;  
@@ -248,11 +248,6 @@ const paginatedProducts = computed(() => {
   // 返回当前页面的切片产品数组  
   return filteredProducts.value.slice(start, end);  
 });  
-// 函数，当搜索产品时将当前页面重置为1  
-
-
-
-
 
 
 onMounted(() => {  

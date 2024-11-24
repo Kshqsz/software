@@ -63,4 +63,15 @@ public class ProductController {
         return Result.success(products);
     }
 
+    /**
+     * 修改商品状态
+     * @param product
+     * @return
+     */
+    @PutMapping("/status")
+    public Result updateStatus(@RequestBody Product product) {
+        productService.updateStatus(product);
+        return Result.success();
+    }
+
 }

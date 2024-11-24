@@ -29,6 +29,7 @@
 import { ref } from 'vue';  
 import { admingetalluser,adminChangeStatus} from '@/api/user';  
 import { reactive, onMounted } from 'vue';  
+// import { ElMessage } from 'element-plus';
 
   
 const status = ref({  
@@ -46,6 +47,7 @@ const toggleStatus = (row) => {
   console.log(status.value.id)
   console.log(status.value.status)
   handleChangeStatus()
+  ElMessage.success("操作成功")
 
 };  
  const handleChangeStatus = async () => {  

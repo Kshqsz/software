@@ -4,6 +4,7 @@ import cn.edu.usts.cs2022.pojo.po.Product;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -25,4 +26,11 @@ public interface ProductMapper {
     Product getById(@Param("id") Integer id);
 
     List<Product> getByIds(@Param("ids") List<Integer> ids);
+
+    /**
+     * 修改商品状态
+     * @param product
+     */
+    @Update("update product set status = #{status} where id = #{id}")
+    void updateStatus(Product product);
 }

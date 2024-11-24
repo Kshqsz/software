@@ -35,7 +35,7 @@
       <el-table-column prop="merchantName" label="商家" />  
       <el-table-column label="操作">  
         <template #default="scope">  
-          <el-button type="danger" @click="deleteProduct(scope.row.id)">强制下架</el-button>  
+          <el-button type="danger" @click="deleteProduct(scope.row)">强制下架</el-button>  
         </template>  
       </el-table-column>  
     </el-table>  
@@ -56,6 +56,7 @@ import { ref, reactive, computed ,onMounted} from 'vue';
 import {admingetAllCategory} from '../api/category'
 import { getAllProduct ,updateStatus} from '../api/product'
 import { getAllMerchant } from '../api/merchant'
+import { ElMessage } from 'element-plus';
 
 
   
@@ -89,11 +90,12 @@ const getAllProductList = async () => {
 };
 
 //强制下架产品
-const deleteProduct = async (id) =>{
+const deleteProduct = async (row) =>{
   try {
-    const res = await updateStatus(id);
+    const res = await updateStatus({ id: row.id, status: -1 });
     console.log(res)
     getAllProductList()
+    ElMessage.success("操作成功~")
   } catch (error) {
     console.error('下架失败', error);  
   }

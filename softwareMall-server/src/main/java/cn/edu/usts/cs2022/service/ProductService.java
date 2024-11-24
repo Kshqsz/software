@@ -21,4 +21,9 @@ public interface ProductService {
 
     List<Product> getByIds(@Param("ids") List<Integer> ids);
 
+    /**
+     * 修改商品状态
+     * @param product
+     */
+    void updateStatus(Product product);
 }
