@@ -6,6 +6,8 @@ import { userCountFavouriteService, userUpdatePasswordService, userUpdateService
          userGetByIdService} from '@/api/user'
 import { Tickets, Edit, Checked} from '@element-plus/icons-vue'
 
+import {userCountOrderService} from '@/api/user'
+
 const userStore = useUserStore()
 const editDialogVisible = ref(false) // 控制修改个人信息对话框
 const changePasswordDialogVisible = ref(false) // 控制修改密码对话框
@@ -120,13 +122,42 @@ const handleSubmitChangePassword = () => {
 
 const stats = ref([
   { label: '我的订单', count: 0, path: '/orders' },
-  { label: '待支付的订单', count: 0, path: '' }, 
+  { label: '待支付的订单', count: 0, path: '/orders' }, 
   { label: '喜欢的商品', count: 1, path: '/favorites' },
-  { label: '已完成的订单', count: 0, path: '' }, 
+  { label: '已完成的订单', count: 0, path: '/orders' }, 
 ])
 onMounted( async () => {
   await countFavourite();
+  await countOrder();
 })
+const countOrder = async () =>{
+  const userId = userInfo.value.id;
+  const res_cancel = await userCountOrderService(
+    {
+      userId: userId,
+      status: -1
+    }
+  );
+  const res_ready = await userCountOrderService(
+    {
+      userId: userId,
+      status: 0
+    }
+  );
+  const res_finish= await userCountOrderService(
+    {
+      userId: userId,
+      status: 1
+    }
+  );
+  const cancel = res_cancel.data.data;
+  const ready = res_ready.data.data;
+  const finish = res_finish.data.data;
+  const all = cancel + ready + finish; 
+  stats.value[0].count = all;
+  stats.value[1].count = ready;
+  stats.value[3].count = finish;
+}
 const countFavourite = async () => {
   const userId = userInfo.value.id;
   const res = await userCountFavouriteService(userId);

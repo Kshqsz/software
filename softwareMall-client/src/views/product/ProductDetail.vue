@@ -7,12 +7,40 @@ import { useUserStore } from '@/stores';
 import { userGetFavouriteService } from '@/api/user'
 import { favouriteAddService, favouriteDeleteService} from '@/api/favourite'
 import { merchantGeyByProductIdService } from '@/api/merchant.js'
+import { orderAddService } from '@/api/order'
+import { useRouter } from 'vue-router';
 
 // 使用 useRoute 获取当前路由信息
 const route = useRoute();
 const userStore = useUserStore();
 const userId = userStore.user.id;
+const router = useRouter();
 
+const confirmOrder = async () => {
+  try {
+    // 调用订单服务
+    const res = await orderAddService({
+      userId,
+      productId,
+      merchantId: merchantInfo.value.id,
+    });
+    const order = res.data.data;
+    ElMessage.success('订单创建成功！即将跳转到支付页面...');
+    showDialog.value = false;
+    // 模拟跳转到支付页面
+    setTimeout(() => {
+      router.push({
+        path: '/payment',
+        query: {
+          order: JSON.stringify(order), // 序列化对象
+        },
+      });
+      //window.location.href = '/payment'; // 替换为实际的支付页面路径
+    }, 1000);
+  } catch (error) {
+    ElMessage.error('订单创建失败，请稍后再试！');
+  }
+};
 const categories = ref([]);
 // 定义响应式变量
 const product = ref({});
@@ -22,6 +50,26 @@ const merchantInfo = ref({
   username: '商家名称',  // 假设商家的用户名
   avatar: 'https://via.placeholder.com/100'  // 假设商家的头像
 });
+
+const showDialog = ref(false); // 控制对话框是否显示
+const orderInfo = ref({
+  name: "",
+  image: "",
+  price: 0,
+  categoryName: "",
+  merchantName: "",
+});
+
+const showOrderDialog = () => {
+  orderInfo.value = {
+    name: product.value.name,
+    image: product.value.image,
+    price: product.value.price,
+    categoryName: getCategoryName(product.value.categoryId),
+    merchantName: merchantInfo.value.username,
+  };
+  showDialog.value = true;
+};
 
 const getMerchant = async () => {
   const res = await merchantGeyByProductIdService(productId);
@@ -92,7 +140,7 @@ const toggleLike = async (productId) => {
         <p class="product-description">{{ product.description }}</p>
 
         <div class="product-actions">
-          <button class="buy-button">立即购买</button>
+          <button class="buy-button" @click="showOrderDialog">立即购买</button>
 
           <!-- 喜欢按钮，修改样式使其与立即购买按钮一致 -->
           <button 
@@ -124,10 +172,39 @@ const toggleLike = async (productId) => {
         您的浏览器不支持视频播放。
       </video>
     </div>
+    <el-dialog
+      v-model="showDialog"
+      title="确认订单"
+      width="500px"
+      :close-on-click-modal="false"
+    >
+      <div class="dialog-content">
+        <img :src="orderInfo.image" alt="Product Image" class="dialog-image" />
+        <p><strong>商品名称：</strong>{{ orderInfo.name }}</p>
+        <p><strong>分类名称：</strong>{{ orderInfo.categoryName }}</p>
+        <p><strong>商家名称：</strong>{{ orderInfo.merchantName }}</p>
+        <p><strong>价格：</strong>￥{{ orderInfo.price }}</p>
+      </div>
+      <template #footer>
+        <el-button @click="showDialog = false">取消</el-button>
+        <el-button type="primary" @click="confirmOrder">确认下单</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <style scoped>
+.dialog-content {
+  text-align: left;
+  font-size: 16px;
+}
+.dialog-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 6px;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
 .category {
   font-size: 18px;
   color: #777;

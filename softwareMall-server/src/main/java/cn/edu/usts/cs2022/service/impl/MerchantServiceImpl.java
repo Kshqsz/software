@@ -59,4 +59,9 @@ public class MerchantServiceImpl implements MerchantService {
     public MerchantVO getByProductId(Integer id) {
         return merchantMapper.getByProductId(id);
     }
+
+    @Override
+    public Merchant getById(Integer id) {
+        return merchantMapper.getById(id);
+    }
 }

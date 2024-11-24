@@ -10,4 +10,8 @@ public interface OrderService {
      * @return
      */
     List<Order> selectAllOrder();
+
+    Order add(OrderDTO orderDTO);
+
+    void cancel(String orderNumber);
 }

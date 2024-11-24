@@ -15,4 +15,10 @@ public interface OrderMapper {
      */
     @Select("SELECT * from `order` ")
     List<Order> selectAllOrder();
-}
+    int add(Order order);
+
+
+    Order getById(Integer id);
+
+    @Update("update `order` set status = -1 where order_number =  #{orderNumber}")
+    void cancel(@Param("orderNumber") String orderNumber);

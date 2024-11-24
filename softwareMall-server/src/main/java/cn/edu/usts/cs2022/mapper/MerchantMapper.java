@@ -31,4 +31,7 @@ public interface MerchantMapper {
     void changeStatus(Merchant merchant);
 
     MerchantVO getByProductId(@Param("id") Integer id);
+
+    @Select("select * from merchant where id = #{id}")
+    Merchant getById(@Param("id") Integer id);
 }

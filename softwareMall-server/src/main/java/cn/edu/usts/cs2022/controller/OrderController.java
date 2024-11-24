@@ -1,5 +1,6 @@
 package cn.edu.usts.cs2022.controller;
 
+import cn.edu.usts.cs2022.pojo.dto.OrderDTO;
 import cn.edu.usts.cs2022.pojo.po.Order;
 import cn.edu.usts.cs2022.pojo.po.Result;
 import cn.edu.usts.cs2022.service.OrderService;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/order")
@@ -24,5 +25,16 @@ public class OrderController {
     public Result<List<Order>> selectAllOrder(){
         List<Order> list = orderService.selectAllOrder();
         return Result.success(list);
+
+    @PostMapping("/add")
+    public Result<Order> add(@RequestBody OrderDTO orderDTO) {
+        Order order =  orderService.add(orderDTO);
+        return Result.success(order);
+    }
+
+    @PostMapping("/cancel/{number}")
+    public Result cancel(@PathVariable("number") String orderNumber) {
+        orderService.cancel(orderNumber);
+        return Result.success();
     }
 }

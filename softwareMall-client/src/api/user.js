@@ -29,3 +29,7 @@ export const userUpdateService = ({id, avatar, username, phone}) => {
 export const userGetByIdService= (id) => {
     return request.get(`/user/${id}`)
 }
+
+export const userCountOrderService = ({userId, status}) => {
+    return request.post("/user/countOrder", {userId, status})
+}

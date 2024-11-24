@@ -96,6 +96,11 @@ public class UserController {
         return Result.success(favourites);
     }
 
+    @PostMapping("/countOrder")
+    public Result<Integer> countOrder(@RequestBody CountOrderDTO countOrderDTO) {
+        Integer count = userService.countOrder(countOrderDTO);
+        return Result.success(count);
+    }
     @GetMapping("/countFavourite/{id}")
     public Result<Integer> countFavourite(@PathVariable("id") Integer userId) {
         Integer count = userService.countFavourite(userId);

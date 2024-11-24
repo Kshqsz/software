@@ -1,6 +1,7 @@
 package cn.edu.usts.cs2022.service.impl;
 
 import cn.edu.usts.cs2022.mapper.UserMapper;
+import cn.edu.usts.cs2022.pojo.dto.CountOrderDTO;
 import cn.edu.usts.cs2022.pojo.dto.UserUpdateDTO;
 import cn.edu.usts.cs2022.pojo.po.Favourite;
 import cn.edu.usts.cs2022.pojo.po.User;
@@ -91,5 +92,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getById(Integer id) {
         return userMapper.getById(id);
+    }
+
+    @Override
+    public Integer countOrder(CountOrderDTO countOrderDTO) {
+        return userMapper.countOrder(countOrderDTO);
     }
 }
