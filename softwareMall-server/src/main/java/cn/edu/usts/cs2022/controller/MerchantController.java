@@ -97,4 +97,11 @@ public class MerchantController {
         MerchantVO merchantVO = merchantService.getByProductId(id);
         return Result.success(merchantVO);
     }
+
+    @GetMapping("{id}")
+    public Result<Merchant> getById(@PathVariable("id") Integer id) {
+        Merchant merchant = merchantService.getById(id);
+        return Result.success(merchant);
+    }
+
 }

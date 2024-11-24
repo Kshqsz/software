@@ -25,4 +25,6 @@ public interface MerchantService {
     void changeStatus(Merchant merchant);
 
     MerchantVO getByProductId(Integer id);
+
+    Merchant getById(Integer id);
 }

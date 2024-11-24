@@ -1,5 +1,6 @@
 package cn.edu.usts.cs2022.service;
 
+import cn.edu.usts.cs2022.pojo.dto.CountOrderDTO;
 import cn.edu.usts.cs2022.pojo.dto.UserUpdateDTO;
 import cn.edu.usts.cs2022.pojo.po.Favourite;
 import cn.edu.usts.cs2022.pojo.po.User;
@@ -35,4 +36,6 @@ public interface UserService {
     void update(UserUpdateDTO userUpdateDTO);
 
     User getById(Integer id);
+
+    Integer countOrder(CountOrderDTO countOrderDTO);
 }
