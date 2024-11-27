@@ -15,4 +15,6 @@ public interface OrderService {
     Order add(OrderDTO orderDTO);
 
     void cancel(String orderNumber);
+
+    void pay(String orderNumber);
 }

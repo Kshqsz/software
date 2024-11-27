@@ -26,4 +26,10 @@ public interface OrderMapper {
 
     @Update("update `order` set status = -1 where order_number =  #{orderNumber}")
     void cancel(@Param("orderNumber") String orderNumber);
+
+    @Select("select * from `order` where order_number = #{orderNumber}")
+    Order getByNumber(@Param("orderNumber") String orderNumber);
+
+    @Update("update `order` set status = 1 where order_number = #{orderNumber}")
+    void pay(String orderNumber);
 }

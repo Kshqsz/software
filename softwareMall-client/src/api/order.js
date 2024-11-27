@@ -8,3 +8,10 @@ export const orderCancelService = (orderNumber) => {
     return request.post(`/order/cancel/${orderNumber}`)
 }
 
+export const orderAllService = () => {
+    return request.get("/order/all")
+}
+
+export const orderPayService = (orderNumber) => {
+    return request.post(`/order/pay/${orderNumber}`)
+}

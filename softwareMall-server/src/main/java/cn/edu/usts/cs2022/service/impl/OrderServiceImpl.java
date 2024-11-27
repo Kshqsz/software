@@ -27,6 +27,7 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> selectAllOrder() {
         return orderMapper.selectAllOrder();
     }
+
     @Override
     public Order add(OrderDTO orderDTO) {
         Order order = new Order();
@@ -44,5 +45,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void cancel(String orderNumber) {
         orderMapper.cancel(orderNumber);
+    }
+
+    @Override
+    public void pay(String orderNumber) {
+        orderMapper.pay(orderNumber);
     }
 }

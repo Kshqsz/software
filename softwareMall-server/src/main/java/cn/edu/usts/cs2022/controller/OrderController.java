@@ -39,4 +39,11 @@ public class OrderController {
         orderService.cancel(orderNumber);
         return Result.success();
     }
+
+    @PostMapping("/pay/{orderNumber}")
+    public Result pay(@PathVariable("orderNumber") String orderNumber) {
+        orderService.pay(orderNumber);
+        return Result.success();
+    }
+
 }

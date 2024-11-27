@@ -4,14 +4,14 @@ import { useRoute, useRouter } from 'vue-router';
 import { productGetByIdService } from '@/api/product';
 import { useUserStore } from '@/stores';
 import { merchantGetByIdService } from '@/api/merchant'
-import { orderCancelService } from '@/api/order'
+import { orderCancelService, orderPayService } from '@/api/order'
 
 // 获取路由参数
 const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
 const user = userStore.user;
-
+const dialogVisible = ref(false);
 const merchant = ref(null)
 const product = ref(null)
 const order = JSON.parse(route.query.order);
@@ -22,12 +22,30 @@ const getMerchant = async () => {
   merchant.value = response.data.data;
 }
 
+const pay = async () => {
+  const number = order.orderNumber;
+  await orderPayService(number);
+  ElMessage.success("支付成功~");
+  dialogVisible.value = true;
+}
 const getProduct = async () => {
   const id = order.productId;
   const response = await productGetByIdService(id);
   product.value = response.data.data;
 }
 
+const download = () => {
+  const url = product.value.source;
+    // 创建一个隐藏的 <a> 元素
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = product.name; // 可选，设置下载文件的默认文件名
+  //link.target = '_blank'; // 可选，避免干扰用户当前页面
+  document.body.appendChild(link); // 将 <a> 添加到文档中
+  link.click(); // 模拟点击下载
+  document.body.removeChild(link); // 下载完成后移除 <a>
+  router.push("/home")
+}
 // 解析订单对象
 onMounted(async () => {
   await getMerchant();
@@ -101,15 +119,30 @@ const cancelOrder = () => {
         <el-button type="danger" size="large" class="cancel-button" @click="cancelOrder">
           取消订单
         </el-button>
-        <el-button type="primary" size="large" class="pay-button">
+        <el-button type="primary" size="large" class="pay-button" @click="pay">
           <i class="fab fa-weixin wechat-icon" style="padding-top: 10px;"></i> 使用微信支付
         </el-button>
       </div>
     </el-card>
+                <!-- 支付成功后弹窗 -->
+    <el-dialog v-model="dialogVisible" title="支付成功" width="400px">
+      <p>支付成功！现在可以下载软件。</p>
+      <div class="download-actions">
+        <el-button type="primary" size="large" @click="download">
+          下载软件
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <style scoped>
+
+/* 弹窗的样式 */
+.download-actions {
+  text-align: center;
+  margin-top: 20px;
+}
 .payment-page {
   padding: 20px;
   max-width: 800px;
