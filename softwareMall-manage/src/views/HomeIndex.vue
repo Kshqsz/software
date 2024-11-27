@@ -1,7 +1,7 @@
 <script setup>  
 import { ref } from 'vue';  
 import { useRouter } from 'vue-router';  
-
+import { useAdminStore } from '@/stores';
 const router = useRouter();  
 const activeIndex = ref('audit');  
 const showLogoutMenu = ref(false);  
@@ -24,7 +24,11 @@ const handleSelect = (index) => {
 };  
 
 const handleLogout = () => {  
-  // 实现退出登录的逻辑  
+  // 实现退出登录的逻辑 
+  //删除token
+  useAdminStore().removeToken()
+  router.push('/'); 
+
   console.log('退出登录');  
 };  
 </script>  

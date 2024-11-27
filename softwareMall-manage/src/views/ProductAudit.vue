@@ -18,23 +18,46 @@
     </el-table>  
 
     <el-dialog v-model="showDetailsDialog" title="商品详情" width="50%" center>  
-      <div v-if="selectedProduct" class="product-details">  
-        <div class="product-image-container">  
-          <img :src="selectedProduct.image" alt="软件图片" class="product-image" />  
-        </div>  
-        <div class="product-info">  
-          <h2>{{ selectedProduct.name }}</h2>  
-          <p>{{ selectedProduct.description }}</p>  
-          <p>价格: {{ selectedProduct.price }}</p>  
-          <p>分类: {{ selectedProduct.categoryName }}</p>  
-          <p>商家: {{ selectedProduct.merchantName }}</p>  
-          <div class="download-button-container">  
-            <el-button type="primary" @click="downloadProduct(selectedProduct)">查看视频</el-button> 
-            <el-button type="primary" @click="downloadProduct(selectedProduct)">下载软件</el-button>  
-          </div>  
+    <div v-if="selectedProduct" class="product-details">  
+      <div class="product-image-video-container">  
+        
+      <!-- 上方展示动态图片 -->  
+        
+      <!-- :src="selectedProduct.image"   -->
+      <img   
+          src="../assets//img/IMG_20220902_152937.jpg" 
+          alt="产品图片"   
+          class="product-image"   
+        />  
+         <!-- 视频区域 -->  
+        <div class="video-container">  
+          <!-- v-if="selectedProduct.video"  -->
+         <!--  :src="selectedProduct.video" --> 
+          <video   
+            v-if="true"
+            class="product-video"   
+            src="../assets/video/8a968f1b9c385d6196b5a9f9a520f2b4.mp4" 
+            controls   
+          >  
+            您的浏览器不支持 video 标签。  
+          </video>  
+          <div v-else>没有可播放的视频！</div>  
         </div>  
       </div>  
-    </el-dialog>  
+      <div class="product-info">  
+        <h2>{{ selectedProduct.name }}</h2>  
+        <p>{{ selectedProduct.description }}</p>  
+        <p>价格: {{ selectedProduct.price }}</p>  
+        <p>分类: {{ selectedProduct.categoryName }}</p>  
+        <p>商家: {{ selectedProduct.merchantName }}</p>  
+        <div class="download-button-container">  
+          <el-button type="primary" @click="downloadProduct(selectedProduct)">  
+            下载软件  
+          </el-button>  
+        </div>  
+      </div>  
+    </div>  
+  </el-dialog>  
   </div>  
 </template>  
 
@@ -48,6 +71,7 @@ import { getAllProduct } from '../api/product'
 import { getAllMerchant } from '../api/merchant'
 import { updateStatus } from '../api/product';
 import { ElMessage } from 'element-plus';
+
 
 
   
@@ -195,10 +219,12 @@ const rejectProduct = async (product) => {
   }  
 };  
 
+//展示商品详情
 const showProductDetails = (product) => {  
   selectedProduct.value = product;  
   showDetailsDialog.value = true;  
 };  
+
 
 const downloadProduct = (product) => {  
   // 下载商品的逻辑  
@@ -207,8 +233,7 @@ const downloadProduct = (product) => {
 
 onMounted(() => {
   getAllCategory()  
-  getAllMerchants()
-  getAllProductList()
+  getAllMerchants().then(() =>{getAllProductList()})
   // 在组件挂载时可以执行一些初始化操作  
 });  
 </script>  
@@ -221,16 +246,17 @@ onMounted(() => {
 }  
 
 .product-image-container {  
-  flex-basis: 50%;  
-  display: flex;  
-  justify-content: center;  
-  align-items: center;  
+  margin-bottom: 20px;  
 }  
 
 .product-image {  
-  max-width: 100%;  
-  max-height: 300px;  
-  object-fit: contain;  
+  width: 100%;  
+  height: 200px;  
+  cursor: pointer;  
+}  
+
+.download-button-container {  
+  margin-top: 20px;  
 }  
 
 .product-info {  
@@ -244,4 +270,34 @@ onMounted(() => {
   justify-content: center;  
   margin-top: 20px;  
 }  
+
 </style>
+<style scoped>  
+.product-details {  
+  display: flex;  
+}  
+
+.product-image-video-container {  
+  display: flex;  
+  flex-direction: column; /* 垂直排列 */  
+  width: 50%; /* 左侧宽度 */  
+}  
+
+.product-image {  
+  width: 300px; /* 使图片自适应 */  
+  height: 200px; /* 高度自适应 */  
+}  
+
+.video-container {  
+  margin-top: 10px; /* 图片与视频之间的间距 */  
+}  
+
+.product-video {  
+  width: 300px ;/* 视频宽度自适应 */  
+  height: 200px; /* 高度自适应 */  
+}  
+
+.product-info {  
+  padding-left: 20px; /* 右侧信息的内边距 */  
+}  
+</style>  
