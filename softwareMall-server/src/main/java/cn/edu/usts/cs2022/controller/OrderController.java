@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/order")
 @RequiredArgsConstructor
@@ -22,10 +24,10 @@ public class OrderController {
      * 查询所有订单
      */
     @GetMapping("/all")
-    public Result<List<Order>> selectAllOrder(){
+    public Result<List<Order>> selectAllOrder() {
         List<Order> list = orderService.selectAllOrder();
         return Result.success(list);
-
+    }
     @PostMapping("/add")
     public Result<Order> add(@RequestBody OrderDTO orderDTO) {
         Order order =  orderService.add(orderDTO);
@@ -37,4 +39,11 @@ public class OrderController {
         orderService.cancel(orderNumber);
         return Result.success();
     }
+
+    @PostMapping("/pay/{orderNumber}")
+    public Result pay(@PathVariable("orderNumber") String orderNumber) {
+        orderService.pay(orderNumber);
+        return Result.success();
+    }
+
 }
