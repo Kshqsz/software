@@ -470,4 +470,7 @@ function showAddCategoryDialog() {
   height: 178px;
   text-align: center;
 }
+.dialog-footer {
+  padding-left: 40%;
+}
 </style> 

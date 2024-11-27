@@ -88,7 +88,9 @@ const gridData = [
     <!-- 顶部导航栏 -->
     <el-header height="60px" class="top-nav">
       <!-- Logo -->
-      <h1 class="title" @click="goToHome">SoftWare</h1>
+      <img src="../../assets/img/logo.png" alt="" width="60px" style="padding-left: 120px; padding-top: 20px; cursor: pointer;" @click="goToHome">
+      <h2 style="padding-top: 20px; padding-right: 20px;">软件商城</h2>
+      <!-- <h1 class="title" @click="goToHome">SoftWare</h1> -->
       <!-- 导航文字居中 -->
       <div class="nav-items">
         <span v-for="(item, index) in navItems" :key="index" @click="handleNavClick(item)">{{ item.name }}</span>

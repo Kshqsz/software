@@ -21,7 +21,7 @@ const adminStore = useAdminStore()
 const handleLogin = async () => {  
   const res = await adminLoginService(form.value)
   adminStore.setToken(res.data.data)
- // ElMessage.success("登录成功");
+  ElMessage.success("登录成功");
  console.log('1111')
   console.log(adminStore.token)
   router.push('/home'); 
@@ -50,18 +50,16 @@ const handleLogin = async () => {
   </div>  
 </template>  
 
-
-
 <style>  
 .login-container {  
   display: flex;  
   align-items: center;  
   justify-content: center;  
-  height: 100vh;  
+  height: 98vh;  
   background-size: cover; 
   background-position: center;  
   background-repeat: no-repeat; 
-  background-image: url('../assets/img/IMG_20220902_152937.jpg');
+  background-image: url('../assets/img/bk.png');
 }  
 
 .login-card {  

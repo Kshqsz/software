@@ -22,7 +22,7 @@ const handleSelect = (index) => {
 
 const handleLogout = () => {  
   // 实现退出登录的逻辑  
-  console.log('退出登录');  
+  router.push("/")
 };  
 </script>  
 
@@ -30,12 +30,12 @@ const handleLogout = () => {
   <div class="home-container">  
     <header class="header">  
       <div class="logo">  
-        <img src="" alt="Logo" />  
+        <img src="../../assets/img/logo.png" alt="Logo" />  
       </div>  
       <div class="title">软件管理平台</div>  
       <div class="profile">  
         <div class="admin-avatar" @click="showLogoutMenu = !showLogoutMenu">  
-          用户
+          商家
         </div>  
         <div v-if="showLogoutMenu" class="logout-menu">  
           <button @click="handleLogout">退出登录</button>  

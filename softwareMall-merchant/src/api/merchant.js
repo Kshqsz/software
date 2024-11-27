@@ -9,6 +9,15 @@ export const merchantLoginService = ({ username, password }) => {
 export const merchantRegisterService = ({ username, password, rePassword }) => {
     return request.post("/merchant/register", { username, password, rePassword });
 }
+export const  merchantUpdatePasswordService = ({password, rePassword}) => {
+    return request.post("/merchant/updatePassword", {password, rePassword})
+}
+export const merchantUpdateService = ({id, avatar, username, phone}) => {
+    return request.put("/merchant/update", {id, avatar, username, phone})
+}
+export const merchantGetByIdService = (id) => {
+    return request.get(`/merchant/${id}`)
+}
 //查询拥有的所有软件 /mrechant get
 
 
@@ -17,7 +26,6 @@ export const merchantRegisterService = ({ username, password, rePassword }) => {
 //下架商品   /merchant post 修改状态即可
 
 //添加新商品  
-export const merchantAddProductService = ({})
 
 //条件查询商品
 

@@ -2,14 +2,17 @@ package cn.edu.usts.cs2022.service.impl;
 
 import cn.edu.usts.cs2022.mapper.MerchantMapper;
 import cn.edu.usts.cs2022.mapper.ProductMapper;
+import cn.edu.usts.cs2022.pojo.dto.UserUpdateDTO;
 import cn.edu.usts.cs2022.pojo.po.Merchant;
 import cn.edu.usts.cs2022.pojo.vo.MerchantVO;
 import cn.edu.usts.cs2022.service.MerchantService;
+import cn.edu.usts.cs2022.utils.ThreadLocalUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -64,4 +67,17 @@ public class MerchantServiceImpl implements MerchantService {
     public Merchant getById(Integer id) {
         return merchantMapper.getById(id);
     }
+
+    @Override
+    public void updatePassword(String newPassword) {
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Integer userId = (Integer) map.get("merchantId");
+        merchantMapper.updatePassword(userId, newPassword);
+    }
+
+    @Override
+    public void update(UserUpdateDTO userUpdateDTO) {
+        merchantMapper.update(userUpdateDTO);
+    }
+
 }

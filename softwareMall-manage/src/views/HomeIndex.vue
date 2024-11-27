@@ -37,7 +37,7 @@ const handleLogout = () => {
   <div class="home-container">  
     <header class="header">  
       <div class="logo">  
-        <img src="" alt="Logo" />  
+        <img src="../assets/img/logo.png" alt="Logo"/>  
       </div>  
       <div class="title">软件管理平台</div>  
       <div class="profile">  

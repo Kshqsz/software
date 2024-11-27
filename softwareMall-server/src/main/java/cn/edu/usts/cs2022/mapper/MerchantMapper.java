@@ -1,5 +1,6 @@
 package cn.edu.usts.cs2022.mapper;
 
+import cn.edu.usts.cs2022.pojo.dto.UserUpdateDTO;
 import cn.edu.usts.cs2022.pojo.po.Merchant;
 import cn.edu.usts.cs2022.pojo.vo.MerchantVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -34,4 +35,10 @@ public interface MerchantMapper {
 
     @Select("select * from merchant where id = #{id}")
     Merchant getById(@Param("id") Integer id);
+
+    @Update("update merchant set password = #{newPassword} where id = #{userId}")
+    void updatePassword(@Param("userId") Integer userId,
+                        @Param("newPassword") String newPassword);
+
+    void update(UserUpdateDTO userUpdateDTO);
 }

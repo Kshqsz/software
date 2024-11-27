@@ -1,5 +1,6 @@
 package cn.edu.usts.cs2022.service;
 
+import cn.edu.usts.cs2022.pojo.dto.UserUpdateDTO;
 import cn.edu.usts.cs2022.pojo.po.Merchant;
 import cn.edu.usts.cs2022.pojo.vo.MerchantVO;
 
@@ -27,4 +28,8 @@ public interface MerchantService {
     MerchantVO getByProductId(Integer id);
 
     Merchant getById(Integer id);
+
+    void updatePassword(String newPassword);
+
+    void update(UserUpdateDTO userUpdateDTO);
 }

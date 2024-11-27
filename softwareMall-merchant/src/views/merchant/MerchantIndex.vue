@@ -2,22 +2,11 @@
 import { ref } from 'vue';  
 import { useMerchantStore } from '@/stores';
 import { useRouter } from 'vue-router';
-
+import { merchantUpdateService, merchantGetByIdService, merchantUpdatePasswordService } from '@/api/merchant'
+import { ElMessage } from 'element-plus';
 const router = useRouter();
 const merchantStore = useMerchantStore()
-const userInfo = ref(merchantStore.merchant)
-// const userInfo = ref({  
-//   username: '',  
-//   phone: '',  
-//   avatar: 'https://via.placeholder.com/80',  
-// });  
-
-
-const editForm = ref({  
-  username: userInfo.value.username,  
-  phone: userInfo.value.phone,  
-  avatar: userInfo.value.avatar,  
-});  
+const userInfo = ref(merchantStore.merchant);
 
 const showEditDialog = ref(false);  
 const showChangePasswordDialog = ref(false);  
@@ -27,36 +16,51 @@ const passwordForm = ref({
   newPassword: '',  
   confirmPassword: '',  
 });  
+const editedUserInfo = ref({
+  id: userInfo.value.id,
+  avatar: userInfo.value.avatar,
+  username: userInfo.value.username,
+  phone: userInfo.value.phone,
+  password: userInfo.value.password  // 添加password
+});
 
-const handleAvatarSuccess = (response, uploadFile) => {  
-  editForm.value.avatar = URL.createObjectURL(uploadFile.raw);  
-};  
+const updateAvatar = (response) => {
+  editedUserInfo.value.avatar = response.data;
+  ElMessage.success("上传头像成功~");
+}
 
-const beforeAvatarUpload = (file) => {  
-  const isJPG = file.type === 'image/jpeg';  
-  const isLt2M = file.size / 1024 / 1024 < 2;  
-
-  if (!isJPG) {  
-   // ElMessage.error('头像图片只能是 JPG 格式!');  
-  }  
-  if (!isLt2M) {  
-   // ElMessage.error('头像图片大小不能超过 2MB!');  
-  }  
-  return isJPG && isLt2M;  
-};  
-
-const saveUserInfo = () => {  
-  // 执行保存用户信息的逻辑  
-  console.log('保存用户信息:', editForm.value);  
+const getMerchant = async () => {
+  const res = await merchantGetByIdService(userInfo.value.id);
+  merchantStore.setMerchant(res.data.data);
+  userInfo.value = merchantStore.merchant;
+}
+const saveUserInfo = async () => {  
+  await merchantUpdateService(editedUserInfo.value);
+  await getMerchant();
+  ElMessage.success("修改个人信息成功~")
   showEditDialog.value = false;  
 };  
 
-const changePassword = () => {  
+const changePassword = async () => {  
+  // 校验原密码和新密码
+  if (passwordForm.value.oldPassword !== userInfo.value.password) {
+    ElMessage.error("原密码不正确!");
+    return;
+  }
+  if (passwordForm.value.newPassword !== passwordForm.value.confirmPassword) {
+    ElMessage.error("新密码和确认密码不一致!");
+    return;
+  }  
+  const passwordDTO = {
+    password: passwordForm.value.newPassword,
+    rePassword: passwordForm.value.confirmPassword
+  };
+  await merchantUpdatePasswordService(passwordDTO);
   // 执行修改密码的逻辑  
-  console.log('修改密码:', passwordForm.value);  
+  ElMessage.success("修改密码成功~")
   showChangePasswordDialog.value = false;  
 };  
-</script>  
+</script>
 
 <template>  
   <div class="merchant-info-container">  
@@ -71,8 +75,8 @@ const changePassword = () => {
           <el-avatar :size="80" :src="userInfo.avatar" />  
         </div>  
         <div class="user-info">  
-          <div class="username">{{ userInfo.username }}</div>  
-          <div class="phone">{{ userInfo.phone }}</div>  
+          <div class="username">用户名：{{ userInfo.username }}</div>  
+          <div class="phone"> 手机号：{{ userInfo.phone }}</div>  
         </div>  
       </div>  
       <div class="actions">  
@@ -86,23 +90,22 @@ const changePassword = () => {
     </el-card>  
 
     <el-dialog v-model="showEditDialog" title="编辑个人信息">  
-      <el-form :model="editForm" label-width="80px">  
+      <el-form :model="editedUserInfo" label-width="80px">  
         <el-form-item label="用户名">  
-          <el-input v-model="editForm.username" />  
+          <el-input v-model="editedUserInfo.username" />  
         </el-form-item>  
         <el-form-item label="电话">  
-          <el-input v-model="editForm.phone" />  
+          <el-input v-model="editedUserInfo.phone" />  
         </el-form-item>  
         <el-form-item label="头像">  
-          <el-upload  
-            class="avatar-uploader"  
-            :show-file-list="false"  
-            :on-success="handleAvatarSuccess"  
-            :before-upload="beforeAvatarUpload"  
-          >  
-            <img v-if="editForm.avatar" :src="editForm.avatar" class="avatar" />  
-            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>  
-          </el-upload>  
+          <el-upload
+            action="/api/upload"
+            :on-success="updateAvatar"
+            :show-file-list="false"
+          >
+            <img v-if="editedUserInfo.avatar" :src="editedUserInfo.avatar" class="uploaded-avatar" />
+            <div v-else class="avatar-placeholder">点击上传头像</div>
+          </el-upload>
         </el-form-item>  
       </el-form>  
       <template #footer>  
@@ -177,30 +180,29 @@ const changePassword = () => {
   margin-left: 10px;  
 }  
 
-.avatar-uploader .avatar {  
-  width: 78px;  
-  height: 78px;  
-  display: block;  
-}  
+.uploaded-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
 
-.avatar-uploader .el-upload {  
-  border: 1px dashed var(--el-border-color);  
-  border-radius: 6px;  
-  cursor: pointer;  
-  position: relative;  
-  overflow: hidden;  
-  transition: var(--el-transition-duration-fast);  
-}  
+.avatar-placeholder {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  color: #606266;
+  font-size: 14px;
+  cursor: pointer;
+  border: 1px dashed #dcdfe6;
+  transition: background-color 0.3s;
+}
 
-.avatar-uploader .el-upload:hover {  
-  border-color: var(--el-color-primary);  
-}  
-
-.avatar-uploader-icon {  
-  font-size: 28px;  
-  color: #8c939d;  
-  width: 78px;  
-  height: 78px;  
-  text-align: center;  
-}  
+.avatar-placeholder:hover {
+  background-color: #e6f7ff;
+}
 </style>

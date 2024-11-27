@@ -1,8 +1,6 @@
 package cn.edu.usts.cs2022.controller;
 
-import cn.edu.usts.cs2022.pojo.dto.LoginDTO;
-import cn.edu.usts.cs2022.pojo.dto.MerchantDTO;
-import cn.edu.usts.cs2022.pojo.dto.RegisterDTO;
+import cn.edu.usts.cs2022.pojo.dto.*;
 import cn.edu.usts.cs2022.pojo.po.Merchant;
 import cn.edu.usts.cs2022.pojo.po.Result;
 import cn.edu.usts.cs2022.pojo.vo.MerchantVO;
@@ -102,6 +100,23 @@ public class MerchantController {
     public Result<Merchant> getById(@PathVariable("id") Integer id) {
         Merchant merchant = merchantService.getById(id);
         return Result.success(merchant);
+    }
+
+    @PostMapping("/updatePassword")
+    public Result updatePassword(@RequestBody UpdatePasswordDTO updatePasswordDTO) {
+        String newPassword = updatePasswordDTO.getPassword();
+        String reNewPassword = updatePasswordDTO.getRePassword();
+        if (!newPassword.equals(reNewPassword)) {
+            return Result.error("两次密码不一致!");
+        }
+        merchantService.updatePassword(newPassword);
+        return Result.success();
+    }
+
+    @PutMapping("/update")
+    public Result update(@RequestBody UserUpdateDTO userUpdateDTO) {
+        merchantService.update(userUpdateDTO);
+        return Result.success();
     }
 
 }

@@ -112,10 +112,7 @@ const getAllUser = async () => {
   } catch (error) {  
     console.error('获取用户失败:', error);  
   }  
-};  
-
-
-
+}; 
 
 const currentPage = ref(1);  
 const pageSize = ref(10);  

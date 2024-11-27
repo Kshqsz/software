@@ -22,21 +22,17 @@
       <div class="product-image-video-container">  
         
       <!-- 上方展示动态图片 -->  
-        
-      <!-- :src="selectedProduct.image"   -->
       <img   
-          src="../assets//img/IMG_20220902_152937.jpg" 
+        :src="selectedProduct.image"  
           alt="产品图片"   
           class="product-image"   
         />  
          <!-- 视频区域 -->  
         <div class="video-container">  
-          <!-- v-if="selectedProduct.video"  -->
-         <!--  :src="selectedProduct.video" --> 
           <video   
-            v-if="true"
             class="product-video"   
-            src="../assets/video/8a968f1b9c385d6196b5a9f9a520f2b4.mp4" 
+            v-if="selectedProduct.video" 
+            :src="selectedProduct.video" 
             controls   
           >  
             您的浏览器不支持 video 标签。  
@@ -227,8 +223,15 @@ const showProductDetails = (product) => {
 
 
 const downloadProduct = (product) => {  
-  // 下载商品的逻辑  
-  console.log(`下载商品: ${product.name}`);  
+    // 创建一个隐藏的 <a> 元素
+  const url = product.source;
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = product.name; // 可选，设置下载文件的默认文件名
+  //link.target = '_blank'; // 可选，避免干扰用户当前页面
+  document.body.appendChild(link); // 将 <a> 添加到文档中
+  link.click(); // 模拟点击下载
+  document.body.removeChild(link); // 下载完成后移除 <a>
 };  
 
 onMounted(() => {
