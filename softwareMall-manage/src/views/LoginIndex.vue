@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';  
 import { adminLoginService } from '@/api/admin';
 import { useAdminStore} from '@/stores';
+
 const form = ref({  
   username: '',  
   password: '',  
@@ -21,19 +22,29 @@ const adminStore = useAdminStore()
 const handleLogin = async () => {  
   const res = await adminLoginService(form.value)
   adminStore.setToken(res.data.data)
-  ElMessage.success("登录成功");
- console.log('1111')
+  
+  console.log('1111')
   console.log(adminStore.token)
+  
   router.push('/home'); 
   
-};  
+}
+
+
 </script>  
 
 <template>  
   <div class="login-container">  
     <el-card class="login-card">  
       <h2>软件商城管理员登录登录</h2>  
-      <el-form :model="form" :rules="rules" ref="formRef" label-position="top" status-icon>  
+      <el-form 
+        :model="form" 
+        :rules="rules" 
+        ref="formRef" 
+        label-position="top" 
+        status-icon 
+        @keydown.enter="handleLogin" 
+      >  
         <el-form-item label="用户名" prop="username">  
           <el-input v-model="form.username" placeholder="请输入用户名"></el-input>  
         </el-form-item>  
@@ -42,7 +53,7 @@ const handleLogin = async () => {
           <el-input type="password" v-model="form.password" placeholder="请输入密码"></el-input>  
         </el-form-item>  
 
-        <el-form-item>  
+        <el-form-item >  
           <el-button type="primary" @click="handleLogin">登录</el-button>  
         </el-form-item>  
       </el-form>  

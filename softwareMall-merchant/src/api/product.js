@@ -10,3 +10,9 @@ export const productGetAllByMerchantIdService = (merchantId) => {
 export const productUpdateService = (product) => {
     return request.put("/product", product)
 }
+
+// 查询所有商品
+
+export const getAllProduct = () =>{
+    return request.get("/product/all")
+  }

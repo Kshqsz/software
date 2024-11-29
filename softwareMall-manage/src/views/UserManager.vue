@@ -40,7 +40,9 @@ const status = ref({
 // 切换用户状态  
 const toggleStatus = (row) => {  
   // 根据当前状态切换为另一状态  
-  const userId = row.id;
+  const isConfirmed = window.confirm('确定要修改用户状态吗？');
+  if (isConfirmed) {
+    const userId = row.id;
   status.value.id = userId
   row.status = row.status == '1' ? '0' : '1';  
   status.value.status = row.status
@@ -48,6 +50,13 @@ const toggleStatus = (row) => {
   console.log(status.value.status)
   handleChangeStatus()
   ElMessage.success("操作成功")
+    console.log('用户确认操作');
+    // 执行相关操作的代码
+  } else {
+    // 用户点击了“取消”，不执行操作
+    console.log('用户取消操作');
+  }
+  
 
 };  
  const handleChangeStatus = async () => {  

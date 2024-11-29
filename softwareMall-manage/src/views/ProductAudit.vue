@@ -193,7 +193,10 @@ const selectedProduct = ref(null);
 
 const approveProduct = async (product) => {  
   // 审核通过逻辑  
-  try {
+  const isConfirmed = window.confirm('确定同意通过审核吗？');
+  
+  if (isConfirmed) {
+    try {
     const res = await updateStatus({ id: product.id, status: 1 });
     console.log(res)
     getAllProductList()
@@ -201,11 +204,19 @@ const approveProduct = async (product) => {
   } catch (error) {
     console.error('下架失败', error);  
   } 
-};  
+  } else {
+    // 用户点击了“取消”，不执行操作
+    console.log('用户取消操作');
+  }
+};
+
 
 const rejectProduct = async (product) => {  
   // 审核失败逻辑  
-  try {
+  const isConfirmed = window.confirm('确定拒绝该审核吗？');
+  
+  if (isConfirmed) {
+    try {
     const res = await updateStatus({ id: product.id, status: -1 });
     console.log(res)
     getAllProductList()
@@ -213,6 +224,11 @@ const rejectProduct = async (product) => {
   } catch (error) {
     console.error('下架失败', error);  
   }  
+  } else {
+    // 用户点击了“取消”，不执行操作
+    console.log('用户取消操作');
+  }
+  
 };  
 
 //展示商品详情

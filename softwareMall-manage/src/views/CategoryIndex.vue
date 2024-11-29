@@ -92,7 +92,10 @@ const updateCategory = async () => {
 
 // 删除分类的方法
 const deleteCategory = async (id) => {
-  try{
+  const isConfirmed = window.confirm('确认删除该分类吗？');
+  
+  if (isConfirmed) {
+    try{
     console.log(id)
     const res = await admindeleteCategory(id);
     getAllCategory()
@@ -100,6 +103,11 @@ const deleteCategory = async (id) => {
   }catch (error) {  
     console.error('删除用户失败:', error);  
   }  
+  } else {
+    // 用户点击了“取消”，不执行操作
+    console.log('用户取消操作');
+  }
+  
 };
 
 

@@ -13,20 +13,20 @@
     <!-- 订单列表表格 -->  
     <el-table :data="paginatedOrders" style="width: 100%">  
       <el-table-column prop="id" label="订单ID" width="120"></el-table-column>  
-      <el-table-column prop="orderNo" label="订单编号" width="180"></el-table-column>  
-      <el-table-column prop="product" label="交易商品" width="180"></el-table-column>  
+      <el-table-column prop="orderNumber" label="订单编号" width="180"></el-table-column>  
+      <el-table-column prop="productName" label="交易商品" width="180"></el-table-column>  
       <el-table-column prop="productLink" label="商品链接" width="180">  
         <template #default="scope">  
           <a :href="scope.row.productLink" target="_blank">{{ scope.row.productLink }}</a>  
         </template>  
       </el-table-column>  
-      <el-table-column prop="tradeTime" label="交易时间" width="180"></el-table-column>  
-      <el-table-column prop="buyer" label="买家" width="120"></el-table-column>  
+      <el-table-column prop="createTime" label="交易时间" width="180"></el-table-column>  
+      <el-table-column prop="userName" label="买家" width="120"></el-table-column>  
       <el-table-column prop="status" label="订单状态" width="120">  
         <template #default="scope">  
-          <el-tag :type="getStatusTagType(scope.row.status)">{{ scope.row.status }}</el-tag>  
+          <el-tag :type="getStatusTagType(scope.row.status)">{{ getStatusText(scope.row.status) }}</el-tag>  
         </template>  
-      </el-table-column>  
+      </el-table-column> 
     </el-table>  
 
     <!-- 分页控件 -->  
@@ -43,29 +43,72 @@
 </template>  
 
 <script setup>  
-import { ref, computed } from 'vue';  
+import { ref, computed ,onMounted} from 'vue';  
+import { getAllOrder } from '@/api/order';
+import { getAllProduct } from '@/api/product';
+import { admingetalluser } from '@/api/user';
 
-// 订单列表数据  
-const orderList = ref([  
-  {  
-    id: 1,  
-    orderNo: '202301010001',  
-    product: '苹果手机',  
-    productLink: 'https://example.com/apple-phone',  
-    tradeTime: '2023-01-01 10:30:00',  
-    buyer: '张三',  
-    status: '已完成',  
-  },  
-  {  
-    id: 2,  
-    orderNo: '202301010002',  
-    product: '电脑显示器',  
-    productLink: 'https://example.com/computer-monitor',  
-    tradeTime: '2023-01-01 14:20:00',  
-    buyer: '王五',  
-    status: '未支付',  
-  },  
-]);  
+const orderList = ref([]);  
+const merchantMap = ref([])
+const productMap = ref([])
+const productMap2 = ref([])
+const userMap = ref([])
+const getOrderList = async () =>{
+  try {  
+    const res = await getAllOrder();  
+    console.log('获取订单成功:', res.data.data);  
+    orderList.value.splice(0, orderList.value.length, ...res.data.data);
+    const ordersWithNames = orderList.value.map(order => {  
+      return {  
+        ...order,    
+        merchantName: merchantMap[order.merchantId] || '未知商家' ,
+        productName: productMap[order.productId] || '未知商品',
+        productLink: productMap2[order.productId],
+        userName:userMap[order.userId]
+      };  
+    });
+    orderList.value.splice(0, orderList.value.length, ...ordersWithNames);
+  } catch (error) {  
+    console.error('获取用户失败:', error);  
+  }  
+}
+
+//获取产品列表
+const getAllProductList = async () => {  
+  try {  
+    const res = await getAllProduct();  
+    console.log('获取商品列表成功:', res.data.data);  
+
+    productMap.value.splice(0, productMap.value.length, ...res.data.data);
+    res.data.data.forEach(product => {  
+      productMap[product.id] = product.name; 
+      
+    });
+    productMap2.value.splice(0, productMap2.value.length, ...res.data.data);
+    res.data.data.forEach(product => {  
+      productMap2[product.id] = product.source;  
+    });     
+  } catch (error) {  
+    console.error('获取商品列表失败:', error);  
+  }  
+};
+//获取用户列表
+const getAllUser = async () => {  
+  try {  
+    const res = await admingetalluser();  
+    console.log('获取用户成功:', res.data.data);   
+    userMap.value.splice(0, userMap.value.length, ...res.data.data);  
+    res.data.data.forEach(user => {  
+      userMap[user.id] = user.username;   
+    });     
+  } catch (error) {  
+    console.error('获取用户失败:', error);  
+  }  
+}; 
+
+
+ 
+  
 
 // 当前页码和每页数量  
 const currentPage = ref(1);  
@@ -79,7 +122,7 @@ const filteredOrders = computed(() => {
   let orders = [...orderList.value];  
   if (orderNo.value) {  
     orders = orders.filter((order) =>  
-      order.orderNo.toLowerCase().includes(orderNo.value.toLowerCase())  
+      order.orderNumber.toLowerCase().includes(orderNo.value.toLowerCase())  
     );  
   }  
   return orders;  
@@ -92,19 +135,31 @@ const paginatedOrders = computed(() => {
   return filteredOrders.value.slice(start, end);  
 });  
 
-// 根据订单状态获取对应的标签类型  
+//处理状态显示
 const getStatusTagType = (status) => {  
   switch (status) {  
-    case '已完成':  
+    case "1":  
       return 'success';  
-    case '未支付':  
+    case 0:  
       return 'warning';  
-    case '已取消':  
+    case -1:  
       return 'danger';  
     default:  
       return '';  
   }  
 };  
+const getStatusText = (status) => {  
+    switch (status) {  
+      case 1:  
+        return '已完成';  
+      case 0:  
+        return '未支付';  
+      case -1:  
+        return '已取消';  
+      default:  
+        return '未知状态'; // 可选的默认状态  
+    }  
+  }  
 
 // 点击查询按钮时的处理函数  
 const searchOrders = () => {  
@@ -115,6 +170,11 @@ const searchOrders = () => {
 const handlePageChange = () => {  
   // 处理分页切换  
 };  
+onMounted(() => {  
+  getAllProductList()
+  getAllUser()
+  getOrderList()
+});  
 </script>  
 
 <style scoped>  

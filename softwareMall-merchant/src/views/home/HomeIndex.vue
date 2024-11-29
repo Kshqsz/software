@@ -15,7 +15,8 @@ const handleSelect = (index) => {
   const routes = {  
     product: '/home/product',  
     order: '/home/order',  
-    merchant: '/home/merchant',  
+    merchant: '/home/merchant',
+    count:'/home/count'  
   };  
   router.push(routes[index]);  
 };  
@@ -61,6 +62,9 @@ const handleLogout = () => {
           <el-menu-item index="merchant" @click="navigateTo('/home/merchant')">  
             个人信息  
           </el-menu-item>  
+          <el-menu-item index="count" @click="navigateTo('/home/count')">  
+            数据统计  
+          </el-menu-item>
         </el-menu>  
       </el-col>  
       <el-col :span="19" class="content-column">  

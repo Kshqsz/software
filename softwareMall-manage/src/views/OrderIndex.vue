@@ -48,6 +48,7 @@ import { admingetalluser } from '@/api/user';
 const orderList = ref([]);  
 const merchantMap = ref([])
 const productMap = ref([])
+const productMap2 = ref([])
 const userMap = ref([])
 const getOrderList = async () =>{
   try {  
@@ -59,7 +60,7 @@ const getOrderList = async () =>{
         ...order,    
         merchantName: merchantMap[order.merchantId] || '未知商家' ,
         productName: productMap[order.productId] || '未知商品',
-        productLink: productMap[order.productId],
+        productLink: productMap2[order.productId],
         userName:userMap[order.userId]
       };  
     });
@@ -94,7 +95,11 @@ const getAllProductList = async () => {
     productMap.value.splice(0, productMap.value.length, ...res.data.data);
     res.data.data.forEach(product => {  
       productMap[product.id] = product.name; 
-      productMap[product.id] = product.source;  
+      
+    });
+    productMap2.value.splice(0, productMap2.value.length, ...res.data.data);
+    res.data.data.forEach(product => {  
+      productMap2[product.id] = product.source;  
     });     
   } catch (error) {  
     console.error('获取商品列表失败:', error);  

@@ -6,7 +6,7 @@ import Product from '../views/product/ProductManage.vue'
 import Home from '../views/home/HomeIndex.vue'
 import Order from '../views/order/OrderIndex.vue'
 import Merchant from '../views/merchant/MerchantIndex.vue'
-
+import Count from '../views/count/CountIndex.vue'
 
 const routes = [
   {path:'/',component:login},
@@ -18,6 +18,8 @@ const routes = [
       { path: 'product', component: Product },       
       { path: 'order',component: Order },
       {path: 'merchant',component:Merchant},
+      {path:'count',component:Count}
+
     ],  
   },  
 

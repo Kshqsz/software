@@ -97,12 +97,20 @@ const status = ref({
   status: '',  
 });
 const toggleStatus = (row) => {  
-  status.value.id = row.id
+  const isConfirmed = window.confirm('确定要修改该商家状态吗？');
+  
+  if (isConfirmed) {
+    status.value.id = row.id
   row.status = row.status == '1' ? '0' : '1';  
   status.value.status = row.status
   console.log(status.value.id)
   console.log(status.value.status)
   ChangeMerchantStatus(status.value)
+  } else {
+    // 用户点击了“取消”，不执行操作
+    console.log('用户取消操作');
+  }
+  
 
 };  
 
@@ -113,8 +121,6 @@ const showModal = ref(false);
 const selectedMerchant = ref(null);  
 
  
-
-
 
 
 //获取商品列表

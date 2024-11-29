@@ -1,10 +1,10 @@
 <script setup>  
 import { ref } from 'vue';  
 import { useMerchantStore } from '@/stores';
-import { useRouter } from 'vue-router';
+// import { useRouter } from 'vue-router';
 import { merchantUpdateService, merchantGetByIdService, merchantUpdatePasswordService } from '@/api/merchant'
 import { ElMessage } from 'element-plus';
-const router = useRouter();
+// const router = useRouter();
 const merchantStore = useMerchantStore()
 const userInfo = ref(merchantStore.merchant);
 
@@ -144,7 +144,8 @@ const changePassword = async () => {
 }  
 
 .box-card {  
-  width: 600px;  
+  width: 500px;  
+  height: 300px;
 }  
 
 .card-header {  

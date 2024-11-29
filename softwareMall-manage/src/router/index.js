@@ -8,7 +8,7 @@ import User from '../views/UserManager.vue'
 import Home from '../views/HomeIndex.vue'
 import Order from '../views/OrderIndex.vue'
 import Category from '../views/CategoryIndex.vue'
-
+import Count from '../views/CountIndex.vue'
 
 const routes = [
   { path:'/', component:login },
@@ -23,6 +23,7 @@ const routes = [
       { path: 'user', component: User },
       { path: 'order',component: Order },
       {path:'category',component:Category},
+      {path:'count',component:Count},
     ],  
   },  
 

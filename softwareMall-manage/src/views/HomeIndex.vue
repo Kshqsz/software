@@ -19,6 +19,7 @@ const handleSelect = (index) => {
     user: '/home/user',  
     order: '/home/order',  
     category: '/home/category',  
+    count:'/home/count'
   };  
   router.push(routes[index]);  
 };  
@@ -77,6 +78,9 @@ const handleLogout = () => {
           <el-menu-item index="order" @click="navigateTo('/home/order')">  
             查看订单  
           </el-menu-item>  
+          <el-menu-item index="count" @click="navigateTo('/home/count')">  
+            数据统计  
+          </el-menu-item>
         </el-menu>  
       </el-col>  
       <el-col :span="19" class="content-column">  
