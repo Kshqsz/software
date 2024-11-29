@@ -1,6 +1,7 @@
 <script setup>  
 import { ref } from 'vue';  
 import { useRouter } from 'vue-router';  
+import { ShoppingCart, Document, User, DataLine, Box, Edit, Folder } from '@element-plus/icons-vue';
 
 const router = useRouter();  
 const activeIndex = ref('product');  
@@ -53,18 +54,22 @@ const handleLogout = () => {
           text-color="#545c64"  
           active-text-color="#409EFF"  
         >  
+        <el-menu-item index="count" @click="navigateTo('/home/count')">  
+            <el-icon><DataLine/></el-icon>
+            数据统计  
+          </el-menu-item>
           <el-menu-item index="product" @click="navigateTo('/home/product')">  
+            <el-icon><Box/></el-icon>
             软件产品管理  
           </el-menu-item>  
           <el-menu-item index="order" @click="navigateTo('/home/order')">  
+            <el-icon><Document/></el-icon>
             查看订单  
           </el-menu-item>  
           <el-menu-item index="merchant" @click="navigateTo('/home/merchant')">  
+            <el-icon><User/></el-icon>
             个人信息  
           </el-menu-item>  
-          <el-menu-item index="count" @click="navigateTo('/home/count')">  
-            数据统计  
-          </el-menu-item>
         </el-menu>  
       </el-col>  
       <el-col :span="19" class="content-column">  

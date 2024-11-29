@@ -15,11 +15,11 @@
       <el-table-column prop="id" label="订单ID" width="120"></el-table-column>  
       <el-table-column prop="orderNumber" label="订单编号" width="180"></el-table-column>  
       <el-table-column prop="productName" label="交易商品" width="180"></el-table-column>  
-      <el-table-column prop="productLink" label="商品链接" width="180">  
+      <!-- <el-table-column prop="productLink" label="商品链接" width="180">  
         <template #default="scope">  
           <a :href="scope.row.productLink" target="_blank">{{ scope.row.productLink }}</a>  
         </template>  
-      </el-table-column>  
+      </el-table-column>   -->
       <el-table-column prop="createTime" label="交易时间" width="180"></el-table-column>  
       <el-table-column prop="userName" label="买家" width="120"></el-table-column>  
       <el-table-column prop="status" label="订单状态" width="120">  

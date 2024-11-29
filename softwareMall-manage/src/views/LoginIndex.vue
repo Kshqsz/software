@@ -3,7 +3,6 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';  
 import { adminLoginService } from '@/api/admin';
 import { useAdminStore} from '@/stores';
-
 const form = ref({  
   username: '',  
   password: '',  
@@ -25,12 +24,10 @@ const handleLogin = async () => {
   
   console.log('1111')
   console.log(adminStore.token)
-  
+  ElMessage.success("登录成功~")
   router.push('/home'); 
   
 }
-
-
 </script>  
 
 <template>  

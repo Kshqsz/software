@@ -103,6 +103,10 @@ const cancelOrder = () => {
               <el-col :span="18">{{ product ? product.name : '加载中...' }}</el-col>
             </el-row>
             <el-row>
+              <el-col :span="6"><strong>商品价格：</strong></el-col>
+              <el-col :span="18">{{ product.price }}</el-col>
+            </el-row>
+            <el-row>
               <el-col :span="6"><strong>商家名：</strong></el-col>
               <el-col :span="18">{{ merchant ? merchant.username : '加载中...' }}</el-col>
             </el-row>

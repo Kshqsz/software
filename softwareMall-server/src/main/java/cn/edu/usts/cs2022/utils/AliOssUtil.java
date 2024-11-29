@@ -8,7 +8,6 @@ import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.PutObjectResult;
 
 import java.io.InputStream;
-
 public class AliOssUtil {
 
     private static final String ENDPOINT = "https://oss-cn-hangzhou.aliyuncs.com";
