@@ -171,9 +171,9 @@ const handlePageChange = () => {
   // 处理分页切换  
 };  
 onMounted(() => {  
-  getAllProductList()
-  getAllUser()
-  getOrderList()
+  getAllProductList()  
+    .then(getAllUser)  
+    .then(getOrderList)
 });  
 </script>  
 

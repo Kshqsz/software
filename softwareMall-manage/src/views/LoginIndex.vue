@@ -24,7 +24,7 @@ const handleLogin = async () => {
   
   console.log('1111')
   console.log(adminStore.token)
-  ElMessage.success("登录成功~")
+  
   router.push('/home'); 
   
 }

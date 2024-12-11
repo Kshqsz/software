@@ -176,9 +176,12 @@ const getStatusText = (status) => {
 
 onMounted(() => {  
   getAllProductList()
-  getAllMerchants()
-  getAllUser()
-  getOrderList()
+  .then(getAllMerchants)
+  .then(getAllUser)
+  .then(getOrderList)
+  
+  
+  
 });  
 </script>  
 
