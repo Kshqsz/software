@@ -21,7 +21,7 @@ public class AliOssUtil {
         try {
             // 填写字符串。
             String content = "Hello OSS，你好世界";
-
+git
             // 创建PutObjectRequest对象。
             PutObjectRequest putObjectRequest = new PutObjectRequest(BUKET_NAME, objectName, in);
 
