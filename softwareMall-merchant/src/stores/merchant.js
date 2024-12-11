@@ -13,8 +13,9 @@ export const useMerchantStore = defineStore('merchant', () => {
         token.value = ''
     }
     const removeMerchant = () => {
-        merchant = null
+        merchant.value = null
     }
+    
 
     return {
         token,

@@ -1,7 +1,7 @@
 <script setup>  
 import { ref } from 'vue';  
 import { useRouter } from 'vue-router';  
-import { ShoppingCart, Document, User, DataLine, Box, Edit, Folder } from '@element-plus/icons-vue';
+import { Document, User, DataLine, Box, } from '@element-plus/icons-vue';
 
 const router = useRouter();  
 const activeIndex = ref('product');  

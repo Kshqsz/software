@@ -4,3 +4,7 @@ import request from '@/utils/request.js'
 export const getAllOrder = () =>{
   return request.get("/order/all")
 }
+
+export const getOrderWithPrice = () => {
+  return request.get("/order")
+}   

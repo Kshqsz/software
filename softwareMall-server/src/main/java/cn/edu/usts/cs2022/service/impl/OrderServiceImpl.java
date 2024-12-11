@@ -4,6 +4,7 @@ import cn.edu.usts.cs2022.mapper.OrderMapper;
 
 import cn.edu.usts.cs2022.pojo.dto.OrderDTO;
 import cn.edu.usts.cs2022.pojo.po.Order;
+import cn.edu.usts.cs2022.pojo.vo.OrderVO;
 import cn.edu.usts.cs2022.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -50,5 +51,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void pay(String orderNumber) {
         orderMapper.pay(orderNumber);
+    }
+
+    @Override
+    public List<OrderVO> selectOrderWithPrice() {
+        return orderMapper.selectOrderWithPrice();
     }
 }

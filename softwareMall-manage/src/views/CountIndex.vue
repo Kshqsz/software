@@ -16,7 +16,7 @@
       </div>
       <div class="stats-card">
         <h2>销售额统计</h2>
-        <p>{{ salesStats.amount }}</p>
+        <p>{{ salesStats.amount }}￥</p>
       </div>
     </div>
   </div>
@@ -27,7 +27,7 @@ import { ref ,onMounted} from 'vue';
 import {getAllProduct} from '../api/product'
 import { admingetalluser} from '@/api/user'; 
 import { getAllMerchant } from '../api/merchant'
-import { getAllOrder } from '@/api/order';
+import { getOrderWithPrice } from '@/api/order';
 
 // 上架商品数据
 const productStats = ref({
@@ -90,7 +90,7 @@ const getMerchant = async () => {
 
 const getOrderList = async () =>{
   try {  
-    const res = await getAllOrder();  
+    const res = await getOrderWithPrice();  
     console.log('获取订单成功:', res.data.data);  
     const filterOrder = res.data.data.filter(product => product.status == 1); 
     const prices = filterOrder.map(product => product.price); // 提取每个商品的价格

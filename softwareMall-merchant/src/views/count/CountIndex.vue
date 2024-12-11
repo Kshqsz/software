@@ -3,16 +3,16 @@
     <h1>数据统计</h1>
     <div class="stats-grid">
       <div class="stats-card">
-        <h2>商品统计</h2>
+        <h2>商品数量统计</h2>
         <p>{{ productStats.count }}</p>
       </div>
       <div class="stats-card">
-        <h2>商家统计</h2>
+        <h2>粉丝数量统计</h2>
         <p>{{ merchantStats.count }}</p>
       </div>
       <div class="stats-card">
-        <h2>用户统计</h2>
-        <p>{{ userStats.count }}</p>
+        <h2>订单数据统计</h2>
+        <p>{{ orderStats.count }}</p>
       </div>
       <div class="stats-card">
         <h2>销售额统计</h2>
@@ -23,8 +23,29 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref ,onMounted} from 'vue';
+import { jwtDecode } from 'jwt-decode'   
+import {useMerchantStore} from '@/stores/merchant'
+import {getAllProduct} from '@/api/product'
+/* import { admingetalluser} from '@/api/user'; 
+import { getAllMerchant } from '../api/merchant'*/
+import { getOrderWithPrice } from '@/api/order'; 
 
+const merchantID = ref()
+
+//获取当前用户的id
+const  decodeToken = () =>{  
+  try {  
+    console.log(useMerchantStore().token)
+    const token = jwtDecode(useMerchantStore().token)
+    merchantID.value = token.claims.merchantId
+    console.log(token)
+    console.log(merchantID.value)  
+  } catch (error) {  
+    console.error('Error decoding token:', error)  
+ 
+  }  
+}  
 // 商品统计数据
 const productStats = ref({
   count: 0
@@ -36,7 +57,7 @@ const merchantStats = ref({
 });
 
 // 用户统计数据
-const userStats = ref({
+const orderStats = ref({
   count: 0
 });
 
@@ -45,11 +66,42 @@ const salesStats = ref({
   amount: 0
 });
 
-// 假设这些数据是从API获取的，这里我们使用静态数据作为示例
-productStats.value.count = 100; // 假设有100个商品
-merchantStats.value.count = 50;  // 假设有50个商家
-userStats.value.count = 1000;  // 假设有1000个用户
-salesStats.value.amount = 100000; // 假设销售额为100000元
+//获取上架商品数
+const getAllProductList = async () => {  
+  try {  
+    const res = await getAllProduct();  
+    console.log('获取商品列表成功:', res.data.data);  
+    
+    // 确保响应式  
+    const filteredProduct = res.data.data.filter(product => product.status == 1 && product.merchantId ==  merchantID.value); 
+    orderStats.value.count = filteredProduct.length
+     productStats.value.count = filteredProduct.length
+  } catch (error) {  
+    console.error('获取商品列表失败:', error);  
+  }  
+};
+
+//获取所有订单
+const getOrderList = async () =>{
+  try {  
+    const res = await getOrderWithPrice();  
+    console.log('获取订单成功:', res.data.data);  
+    const filterOrder = res.data.data.filter(product => product.status == 1 && product.merchantId ==  merchantID.value); 
+    const prices = filterOrder.map(product => product.price); // 提取每个商品的价格
+    const total = prices.reduce((sum, price) => sum + price, 0); // 计算价格的总和
+    salesStats.value.amount = total
+   
+  } catch (error) {  
+    console.error('获取用户失败:', error);  
+  }  
+}
+
+onMounted(()=>{
+  
+  decodeToken()
+  getAllProductList()
+  getOrderList()
+});
 </script>
 
 <style>

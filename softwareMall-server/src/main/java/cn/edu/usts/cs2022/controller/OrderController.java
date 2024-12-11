@@ -3,6 +3,7 @@ package cn.edu.usts.cs2022.controller;
 import cn.edu.usts.cs2022.pojo.dto.OrderDTO;
 import cn.edu.usts.cs2022.pojo.po.Order;
 import cn.edu.usts.cs2022.pojo.po.Result;
+import cn.edu.usts.cs2022.pojo.vo.OrderVO;
 import cn.edu.usts.cs2022.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,6 +45,15 @@ public class OrderController {
     public Result pay(@PathVariable("orderNumber") String orderNumber) {
         orderService.pay(orderNumber);
         return Result.success();
+    }
+
+    /**
+     * 查询带有价格的订单信息
+     */
+    @GetMapping()
+    public Result<List<OrderVO>> selectOrderWithPrice(){
+        List<OrderVO> list = orderService.selectOrderWithPrice();
+        return Result.success(list);
     }
 
 }

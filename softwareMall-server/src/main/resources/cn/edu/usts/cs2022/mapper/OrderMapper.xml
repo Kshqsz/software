@@ -16,4 +16,8 @@
         SELECT * FROM `order` WHERE id = #{id};
     </select>
 
+    <select id="selectOrderWithPrice" resultType="cn.edu.usts.cs2022.pojo.vo.OrderVO">
+        select `order`.*,product.price from `order` left outer join product on order.product_id = product.id
+    </select>
+
 </mapper>
