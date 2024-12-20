@@ -88,7 +88,7 @@ const gridData = [
     <!-- 顶部导航栏 -->
     <el-header height="60px" class="top-nav">
       <!-- Logo -->
-      <img src="../../assets/img/logo.png" alt="" width="60px" style="padding-left: 120px; padding-top: 20px; cursor: pointer;" @click="goToHome">
+      <img src="../../assets/img/logo.png" alt="" width="90px" style="padding-left: 120px; padding-top: 35px; cursor: pointer;" @click="goToHome">
       <h2 style="padding-top: 20px; padding-right: 20px;">软件商城</h2>
       <!-- <h1 class="title" @click="goToHome">SoftWare</h1> -->
       <!-- 导航文字居中 -->
@@ -129,6 +129,10 @@ const gridData = [
         size="small"
       ></el-input>
     </el-header>
+    <!-- 在顶部导航栏下方添加文字 -->
+        <div class="software-center">
+          <span>苏科大软件工程中心</span>
+        </div>
     <div>
       <router-view></router-view>
     </div>
@@ -151,15 +155,15 @@ const gridData = [
 
 .nav-items {
   padding-left: 100px;
-  padding-top: 15px;
+  padding-top: 30px;
   display: flex;
   gap: 15px;
-  font-size: 16px;
+  font-size: 18px;
   justify-content: center;
   cursor: pointer;
 }
 .welcome span {
-  padding-top: 15px;
+  padding-top: 30px;
   cursor: default;
   display: inline-flex;
   align-items: center;
@@ -169,7 +173,7 @@ const gridData = [
   margin-right: 10px; 
 }
 .search-box {
-  margin-top: 15px;
+  margin-top: 30px;
   margin-right: 120px;
   width: 250px;
   height: 45px;
@@ -213,5 +217,10 @@ const gridData = [
   color: #0073e6;
   cursor: pointer;
   text-decoration: none; /* 取消下划线 */
+}
+.software-center {
+  text-align: left;
+  font-size: 14px;
+  padding-left: 230px;
 }
 </style>

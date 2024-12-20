@@ -88,8 +88,8 @@ const getOrderList = async () =>{
     console.log('获取订单成功:', res.data.data);  
     const filterOrder = res.data.data.filter(product => product.status == 1 && product.merchantId ==  merchantID.value); 
     const prices = filterOrder.map(product => product.price); // 提取每个商品的价格
-    const total = prices.reduce((sum, price) => sum + price, 0); // 计算价格的总和
-    salesStats.value.amount = total
+    const total = parseFloat(prices.reduce((sum, price) => sum + price, 0).toFixed(2)); // 计算价格的总和并保留两位小数  
+    salesStats.value.amount = total; 
    
   } catch (error) {  
     console.error('获取用户失败:', error);  

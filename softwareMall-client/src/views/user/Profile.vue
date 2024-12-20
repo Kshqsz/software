@@ -184,7 +184,7 @@ const goToDetail = (stat) => {
         <img class="avatar " :src="userInfo.avatar ? userInfo.avatar: 'https://via.placeholder.com/100' " alt="用户头像" />
         <div>
           <h2>{{ userInfo.username }}</h2>
-          <p> 晚上好~ </p>
+          <p> 您好~ </p>
           <a href="#" class="edit-link" @click.prevent="openEditDialog">修改个人信息 &gt;</a>
         </div>
       </div>

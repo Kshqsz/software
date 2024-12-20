@@ -14,6 +14,7 @@ const user = userStore.user;
 const dialogVisible = ref(false);
 const merchant = ref(null)
 const product = ref(null)
+const price = ref(0)
 const order = JSON.parse(route.query.order);
 
 const getMerchant = async () => {
@@ -32,6 +33,7 @@ const getProduct = async () => {
   const id = order.productId;
   const response = await productGetByIdService(id);
   product.value = response.data.data;
+  price.value = product.value.price;
 }
 
 const download = () => {
@@ -104,7 +106,7 @@ const cancelOrder = () => {
             </el-row>
             <el-row>
               <el-col :span="6"><strong>商品价格：</strong></el-col>
-              <el-col :span="18">{{ product.price }}</el-col>
+              <el-col :span="18">{{ price }}</el-col>
             </el-row>
             <el-row>
               <el-col :span="6"><strong>商家名：</strong></el-col>
