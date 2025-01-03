@@ -51,6 +51,12 @@ watch(
   { immediate: true } // 页面加载时就调用一次过滤
 );
 
+// 处理分页变化
+const pageChange = (page) => {
+  currentPage.value = page;  // 更新当前页码
+  updatePagedResults();  // 更新分页数据
+};
+
 onMounted(async () => {
   const category_res = await categoryGetAllService();
   categories.value = category_res.data.data;
@@ -85,23 +91,16 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+.search-result-page {
+  padding: 20px;
+  margin-left: 120px;
+}
+
 .no-data {
   text-align: center;
   color: #999;
   font-size: 18px;
   margin-top: 50px;
-}
-
-.category {
-  font-size: 14px;
-  color: #777;
-  margin-top: 5px;
-  font-style: italic;
-}
-
-.search-result-page {
-  padding: 20px;
-  margin-left: 120px;
 }
 
 .product-list {
@@ -115,5 +114,12 @@ onMounted(async () => {
   padding-left: 40%;
   text-align: center;
   margin-top: 20px;
+}
+
+.category {
+  font-size: 14px;
+  color: #777;
+  margin-top: 5px;
+  font-style: italic;
 }
 </style>

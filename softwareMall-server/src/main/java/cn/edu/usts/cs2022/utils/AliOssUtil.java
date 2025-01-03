@@ -13,7 +13,7 @@ public class AliOssUtil {
     private static final String ENDPOINT = "https://oss-cn-hangzhou.aliyuncs.com";
     private static final String ACCESS_KEY_ID = "";
     private static final String ACCESS_KEY_SECRET = "";
-    private static final String BUKET_NAME = "";
+    private static final String BUKET_NAME = "software-mall";
     public static String uploadFile(String objectName, InputStream in) throws Exception {
         // 创建OSSClient实例。
         OSS ossClient = new OSSClientBuilder().build(ENDPOINT, ACCESS_KEY_ID, ACCESS_KEY_SECRET);
